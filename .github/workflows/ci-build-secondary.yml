@@ -2,8 +2,6 @@ name: Build
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "master" ]
 
 jobs:
   build:
@@ -12,8 +10,13 @@ jobs:
     strategy:
       matrix:
         arch:
-        - x86_64
-        - aarch64
+        - s390x
+        - powerpc64
+        - x86
+        - riscv64
+        - mips
+        - alpha
+        - sparc64
 
     steps:
     - name: Checkout
