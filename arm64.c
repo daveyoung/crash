@@ -787,7 +787,9 @@ arm64_init(int when)
 		 */
 		if(!machdep->machspec->CONFIG_ARM64_KERNELPACMASK)
 			arm64_recalc_KERNELPACMASK();
+		break;
 
+	case POST_VM:
 		arm64_irq_stack_init();
 		arm64_overflow_stack_init();
 		arm64_stackframe_init();
