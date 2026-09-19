@@ -18,12 +18,12 @@
 #include <sys/time.h>
 #include <linux/types.h>
 #include <elf.h>
+#include "snap_help.h"		/* help data generated from man/crash-snap.8 */
 
 void snap_init(void);
 void snap_fini(void);
 
 void cmd_snap(void);     
-char *help_snap[];
 
 static struct command_table_entry command_table[] = {
 	{ "snap", cmd_snap, help_snap, 0 },    
@@ -151,18 +151,6 @@ cmd_snap(void)
 }
 
 
-char *help_snap[] = {
-        "snap",                     /* command name */
-        "take a memory snapshot",   /* short description */
-        "[-n] dumpfile",            /* filename */
- 
-        "  This command takes a snapshot of physical memory and creates an ELF vmcore.",
-	"  The default vmcore is a kdump-style dumpfile.  Supported on x86, x86_64,",
-	"  ia64 and ppc64 architectures only.",
-	" ",
-	"    -n  create a netdump-style vmcore (n/a on x86_64).",
-        NULL
-};
 
 /*
  *  Architecture-specific and -generic ELF header data borrowed from the

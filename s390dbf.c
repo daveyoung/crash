@@ -1418,24 +1418,6 @@ s390dbf_usage(command_t * cmd)
  * s390 debug feature command for crash
  */
 
-char *help_s390dbf[] = {
-	"s390dbf",
-	"s390dbf prints out debug feature logs",
-	"[-v] [-s dirname] [debug log] [debug view]"
-	"",
-	"Display Debug logs:",
-	" + If called without parameters, all active debug logs are listed.",
-	" + If called with the name of a debug log, all debug-views for which",
-	"   the debug-log has registered are listed. It is possible thatsome",
-	"   of the debug views are not available to 'crash'.",
-	" + If called with the name of a debug-log and an available viewname,",
-	"   the specified view is printed.",
-	" + If called with '-s dirname', the s390dbf is saved to the specified",
-	"   directory",
-	" + If called with '-v', all debug views which are available to",
-	"   'crash' are listed",
-	NULL
-};
 
 void cmd_s390dbf()
 {

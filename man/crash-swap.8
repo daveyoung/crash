@@ -1,0 +1,25 @@
+.\" crash-command: swap
+.\" crash-symbol: help_swap
+.TH CRASH-SWAP 8
+.SH NAME
+crash-swap \- swap device information
+.SH SYNOPSIS
+.in 0
+.nf
+swap
+.fi
+.in
+.SH DESCRIPTION
+.in 0
+.nf
+  This command displays information for each configured swap device.
+.fi
+.in
+.SH EXAMPLE
+.in 0
+.nf
+  crash> swap
+  SWAP_INFO_STRUCT    TYPE       SIZE       USED    PCT  PRI  FILENAME
+  ffff880153d45f40  PARTITION  7192568k   1200580k  16%   -1  /dev/dm-1
+.fi
+.in

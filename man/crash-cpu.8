@@ -1,0 +1,33 @@
+.\" crash-command: cpu
+.\" crash-symbol: help_cpu
+.TH CRASH-CPU 8
+.SH NAME
+crash-cpu \- set context to the active task on a cpu
+.SH SYNOPSIS
+.in 0
+.nf
+cpu [cpu]
+.fi
+.in
+.SH DESCRIPTION
+.in 0
+.nf
+  This command sets the current context to the active task on a cpu.  If no
+  argument is given, the current context is displayed.
+
+    cpu   a valid cpu number
+
+  This command is not allowable on live systems.
+.fi
+.in
+.SH EXAMPLES
+.in 0
+.nf
+    crash> cpu 1
+         PID: 286
+     COMMAND: "in.rlogind"
+        TASK: c0b3a000 
+         CPU: 1 
+       STATE: TASK_RUNNING (ACTIVE)
+.fi
+.in

@@ -595,6 +595,13 @@ struct program_context {
 
 typedef void (*cmd_func_t)(void);
 
+/*
+ *  Command help data generated from the man pages (see help_man.c) stores a
+ *  sentinel in help_data[0], the argument synopsis in help_data[1] and the
+ *  rendered man page text from help_data[2] onwards.
+ */
+#define MANPAGE_HELP "@MANPAGE@"
+
 struct command_table_entry {               /* one for each command in menu */
 	char *name;
 	cmd_func_t func;

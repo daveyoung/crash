@@ -1,0 +1,24 @@
+.\" crash-command: btop
+.\" crash-symbol: help_btop
+.TH CRASH-BTOP 8
+.SH NAME
+crash-btop \- bytes to page
+.SH SYNOPSIS
+.in 0
+.nf
+btop address ...
+.fi
+.in
+.SH DESCRIPTION
+.in 0
+.nf
+  This command translates a hexadecimal address to its page number.
+.fi
+.in
+.SH EXAMPLES
+.in 0
+.nf
+    crash> btop 512a000
+    512a000: 512a
+.fi
+.in

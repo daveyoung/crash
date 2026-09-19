@@ -1,0 +1,24 @@
+.\" crash-command: ptob
+.\" crash-symbol: help_ptob
+.TH CRASH-PTOB 8
+.SH NAME
+crash-ptob \- page to bytes
+.SH SYNOPSIS
+.in 0
+.nf
+ptob page_number ...
+.fi
+.in
+.SH DESCRIPTION
+.in 0
+.nf
+  This command translates a page frame number to its byte value.
+.fi
+.in
+.SH EXAMPLES
+.in 0
+.nf
+    crash> ptob 512a
+    512a: 512a000
+.fi
+.in

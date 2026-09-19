@@ -16,12 +16,12 @@
  */
 
 #include "defs.h"      /* From the crash source top-level directory */
+#include "echo_help.h" /* help data generated from man/crash-echo.8 */
 
 static void echo_init(void);    /* constructor function */
 static void echo_fini(void);    /* destructor function (optional) */
 
 static void cmd_echo(void);     /* Declare the commands and their help data. */
-static char *help_echo[];
 
 /*
  * Please making the functions and global variables static within your
@@ -100,17 +100,5 @@ cmd_echo(void)
  *
  */
  
-static char *help_echo[] = {
-        "echo",                        /* command name */
-        "echoes back its arguments",   /* short description */
-        "arg ...",                     /* argument synopsis, or " " if none */
- 
-        "  This command simply echoes back its arguments.",
-        "\nEXAMPLE",
-        "  Echo back all command arguments:\n",
-        "    crash> echo hello, world",
-        "    hello, world",
-        NULL
-};
 
 

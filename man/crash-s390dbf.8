@@ -1,0 +1,27 @@
+.\" crash-command: s390dbf
+.\" crash-symbol: help_s390dbf
+.TH CRASH-S390DBF 8
+.SH NAME
+crash-s390dbf \- s390dbf prints out debug feature logs
+.SH SYNOPSIS
+.in 0
+.nf
+s390dbf [-v] [-s dirname] [debug log] [debug view]
+.fi
+.in
+.SH DESCRIPTION
+.in 0
+.nf
+Display Debug logs:
+ + If called without parameters, all active debug logs are listed.
+ + If called with the name of a debug log, all debug-views for which
+   the debug-log has registered are listed. It is possible thatsome
+   of the debug views are not available to 'crash'.
+ + If called with the name of a debug-log and an available viewname,
+   the specified view is printed.
+ + If called with '-s dirname', the s390dbf is saved to the specified
+   directory
+ + If called with '-v', all debug views which are available to
+   'crash' are listed
+.fi
+.in

@@ -24,7 +24,7 @@ PROGRAM=crash
 # Supported targets: X86 ALPHA PPC IA64 PPC64 SPARC64
 # TARGET and GDB_CONF_FLAGS will be configured automatically by configure
 #
-TARGET=
+TARGET=X86_64
 GDB_CONF_FLAGS=
 
 # Supported arches for cross compilation: x86_64, x86, aarch64, s390x,
@@ -81,15 +81,16 @@ endif
 #
 # GDB, GDB_FILES, GDB_OFILES and GDB_PATCH_FILES will be configured automatically by configure 
 #
-GDB=
-GDB_FILES=
-GDB_OFILES=
-GDB_PATCH_FILES=
+GDB=gdb-16.2
+GDB_FILES=${GDB_16.2_FILES}
+GDB_OFILES=${GDB_16.2_OFILES}
+GDB_PATCH_FILES=gdb-16.2.patch
 
 #
 # Default installation directory
 #
 INSTALLDIR=${DESTDIR}/usr/bin
+MANDIR=${DESTDIR}/usr/share/man
 
 # LDFLAGS will be configured automatically by configure
 LDFLAGS=
@@ -108,7 +109,7 @@ VMWARE_HFILES=vmware_vmss.h
 MAPLE_TREE_HFILES=maple_tree.h
 LZORLE_HFILES=lzorle_decompress.h
 
-CFILES=main.c tools.c global_data.c memory.c filesys.c help.c task.c \
+CFILES=main.c tools.c global_data.c memory.c filesys.c help.c help_man.c task.c \
 	kernel.c test.c gdb_interface.c configure.c net.c dev.c bpf.c \
 	printk.c \
 	alpha.c x86.c ppc.c ia64.c s390.c s390x.c s390dbf.c ppc64.c x86_64.c \
@@ -130,7 +131,7 @@ SOURCE_FILES=${CFILES} ${GENERIC_HFILES} ${MCORE_HFILES} \
 	${IBM_HFILES} ${SADUMP_HFILES} ${VMWARE_HFILES} ${MAPLE_TREE_HFILES} \
 	${LZORLE_HFILES}
 
-OBJECT_FILES=main.o tools.o global_data.o memory.o filesys.o help.o task.o \
+OBJECT_FILES=main.o tools.o global_data.o memory.o filesys.o help.o help_man.o task.o \
 	build_data.o kernel.o test.o gdb_interface.o net.o dev.o bpf.o \
 	printk.o \
 	alpha.o x86.o ppc.o ia64.o s390.o s390x.o s390dbf.o ppc64.o x86_64.o \
@@ -154,9 +155,13 @@ MEMORY_DRIVER_FILES=memory_driver/Makefile memory_driver/crash.c memory_driver/R
 # directory.
 
 EXTENSIONS=extensions
-EXTENSION_SOURCE_FILES=${EXTENSIONS}/Makefile ${EXTENSIONS}/echo.c ${EXTENSIONS}/dminfo.c \
-	${EXTENSIONS}/snap.c ${EXTENSIONS}/snap.mk ${EXTENSIONS}/trace.c \
+EXTENSION_SOURCE_FILES=${EXTENSIONS}/Makefile ${EXTENSIONS}/echo.c ${EXTENSIONS}/echo_help.h \
+	${EXTENSIONS}/dminfo.c ${EXTENSIONS}/dminfo_help.h ${EXTENSIONS}/snap.c \
+	${EXTENSIONS}/snap_help.h ${EXTENSIONS}/snap.mk ${EXTENSIONS}/trace.c \
 	${EXTENSIONS}/eppic.c ${EXTENSIONS}/eppic.mk
+
+# Hand-maintained command man pages and the generator for the C help data.
+MAN_FILES=${wildcard man/crash-*.8} man/gen-help-data.py
 
 DAEMON_OBJECT_FILES=remote_daemon.o va_server.o va_server_v1.o \
 	lkcd_common.o lkcd_v1.o lkcd_v2_v3.o lkcd_v5.o lkcd_v7.o lkcd_v8.o \
@@ -243,7 +248,7 @@ GDB_16.2_OFILES=${GDB}/gdb/symtab.o crash_target.o
 # 
 # GDB_FLAGS is passed up from the gdb Makefile.
 #
-GDB_FLAGS=
+GDB_FLAGS=-DGDB_16_2
 
 #
 # WARNING_OPTIONS and WARNING_ERROR are both applied on a per-file basis. 
@@ -260,9 +265,9 @@ TARGET_CFLAGS=
 
 CRASH_CFLAGS=-g -D${TARGET} ${TARGET_CFLAGS} ${GDB_FLAGS} ${CFLAGS}
 
-GPL_FILES=
+GPL_FILES=COPYING3
 TAR_FILES=${SOURCE_FILES} Makefile ${GPL_FILES} README crash-release crash.8 \
-	${EXTENSION_SOURCE_FILES} ${MEMORY_DRIVER_FILES}
+	${EXTENSION_SOURCE_FILES} ${MEMORY_DRIVER_FILES} ${MAN_FILES}
 CSCOPE_FILES=${SOURCE_FILES}
 
 READLINE_DIRECTORY=./${GDB}/readline/readline
@@ -376,6 +381,9 @@ build_data.o: force
 install:
 	/usr/bin/install -d ${INSTALLDIR}
 	/usr/bin/install ${PROGRAM} ${INSTALLDIR}
+	/usr/bin/install -d ${MANDIR}/man8
+	/usr/bin/install -m 644 crash.8 ${MANDIR}/man8
+	/usr/bin/install -m 644 man/crash-*.8 ${MANDIR}/man8
 #	/usr/bin/install ${PROGRAM}d ${INSTALLDIR}
 
 unconfig: make_configure
@@ -407,6 +415,9 @@ filesys.o: ${GENERIC_HFILES} filesys.c
 
 help.o: ${GENERIC_HFILES} help.c
 	${CC} -c ${CRASH_CFLAGS} help.c ${WARNING_OPTIONS} ${WARNING_ERROR}
+
+help_man.o: ${GENERIC_HFILES} help_man.c
+	${CC} -c ${CRASH_CFLAGS} help_man.c ${WARNING_OPTIONS} ${WARNING_ERROR}
 
 memory.o: ${GENERIC_HFILES} ${MAPLE_TREE_HFILES} memory.c
 	${CC} -c ${CRASH_CFLAGS} memory.c ${WARNING_OPTIONS} ${WARNING_ERROR}
@@ -749,3 +760,13 @@ cleandocs:
 	$(MAKE) -C doc clean
 
 .PHONY: doc htmldocs pdfdocs cleandocs
+
+#
+# Command help lives in the hand-maintained man pages under man/; regenerate
+# the committed C help data (help_man.c and extensions/*_help.h) from them.
+# This needs man(1) and col(1) and is only required after editing a man page.
+#
+man:
+	python3 man/gen-help-data.py
+
+.PHONY: man

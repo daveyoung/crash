@@ -1,0 +1,31 @@
+.\" crash-command: pte
+.\" crash-symbol: help_pte
+.TH CRASH-PTE 8
+.SH NAME
+crash-pte \- translate a page table entry
+.SH SYNOPSIS
+.in 0
+.nf
+pte contents ...
+.fi
+.in
+.SH DESCRIPTION
+.in 0
+.nf
+  This command translates the hexadecimal contents of a PTE into its physical
+  page address and page bit settings.  If the PTE references a swap location,
+  the swap device and offset are displayed.
+.fi
+.in
+.SH EXAMPLES
+.in 0
+.nf
+    crash> pte d8e067
+     PTE    PHYSICAL  FLAGS
+    d8e067   d8e000   (PRESENT|RW|USER|ACCESSED|DIRTY)
+ 
+    crash> pte 13f600
+     PTE      SWAP     OFFSET
+    13f600  /dev/hda2   5104
+.fi
+.in

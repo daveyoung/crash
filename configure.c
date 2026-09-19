@@ -1511,6 +1511,7 @@ make_spec_file(struct supported_gdb_version *sp)
 	printf("%%defattr(-,root,root)\n");
 	printf("/usr/bin/crash\n");
 	printf("%%{_mandir}/man8/crash.8*\n");
+	printf("%%{_mandir}/man8/crash-*.8*\n");
      /*	printf("/usr/bin/crashd\n"); */
 	printf("%%doc README\n");
 	printf("\n");

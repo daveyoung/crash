@@ -1251,7 +1251,7 @@ whereas 3 gigabytes could be expressed as ``c0000000``.
 
 It should be noted that several commands will **only** accept hexadecimal
 numerical arguments. For example, the
-`rd <https://crash-utility.github.io/help_pages/rd.html>`__ ("read") command
+:manpage:`crash-rd(8)` ("read") command
 only accepts hexadecimal addresses. Therefore a read from user address of
 0x40017000 could be entered as:
 
@@ -1280,7 +1280,7 @@ output. So, by default, command output that would overflow the user's display
 screen is piped to ``/usr/bin/less``, along with a prompt line that informs
 the user how to scroll forward, backward, or to quit the command. For example,
 here is an example of what a
-`ps <https://crash-utility.github.io/help_pages/ps.html>`__ command might look
+:manpage:`crash-ps(8)` command might look
 like:
 
 ::
@@ -1414,7 +1414,7 @@ decimal to hexadecimal, and back again:
    crash>
 
 Alternatively, the ``px`` or ``pd`` aliases coerce the "print" command
-`p <https://crash-utility.github.io/help_pages/p.html>`__, to override the
+:manpage:`crash-p(8)`, to override the
 current output radix. For example, here the changing value of ``jiffies`` on a
 live system is printed using the current default radix, then in hexadecimal,
 and lastly in decimal:
@@ -1509,7 +1509,7 @@ example, here is a session begun on a dumpfile that was created when an
    crash>
 
 During runtime, the current context can always be displayed by entering the
-`set <https://crash-utility.github.io/help_pages/set.html>`__ command with no
+:manpage:`crash-set(8)` command with no
 arguments:
 
 ::
@@ -1528,7 +1528,7 @@ Changing the Crash Context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The current context can be changed to a new task via the
-`set <https://crash-utility.github.io/help_pages/set.html>`__ command. Either
+:manpage:`crash-set(8)` command. Either
 of two "handles" may be used to identify a task, the PID number, or the kernel
 address of the task's ``task_struct``. For example:
 
@@ -1577,7 +1577,7 @@ Context-Sensitive Commands
 
 It is important to be aware that several ``crash`` commands are
 context-sensitive. For example, the
-`files <https://crash-utility.github.io/help_pages/files.html>`__ command
+:manpage:`crash-files(8)` command
 displays data about the open files of a task. If it is issued with no
 arguments, it displays the open files data of the current context. In this
 example, the current context happens to be PID 642, the ``klogd`` daemon:
@@ -1594,7 +1594,7 @@ example, the current context happens to be PID 642, the ``klogd`` daemon:
      2  ce06c5c0  ce2423a0  ce462c80  REG   /boot/System.map-2.4.9-e.3enterprise
 
 However, if the
-`files <https://crash-utility.github.io/help_pages/files.html>`__ command is
+:manpage:`crash-files(8)` command is
 issued with either of the two task handles as an argument, then it will
 display the open files data of the specified task. In this example, PID 12731
 is specified:
@@ -1613,19 +1613,19 @@ is specified:
      5  c2927a80  c6cad9a0  c5764ac0  REG   /tmp/crontab.12730
 
 This type of context-sensitive behaviour is also exhibited by the
-`vm <https://crash-utility.github.io/help_pages/vm.html>`__,
-`bt <https://crash-utility.github.io/help_pages/bt.html>`__,
-`sig <https://crash-utility.github.io/help_pages/sig.html>`__,
-`set <https://crash-utility.github.io/help_pages/set.html>`__,
-`net <https://crash-utility.github.io/help_pages/net.html>`__ and
-`task <https://crash-utility.github.io/help_pages/task.html>`__ commands.
+:manpage:`crash-vm(8)`,
+:manpage:`crash-bt(8)`,
+:manpage:`crash-sig(8)`,
+:manpage:`crash-set(8)`,
+:manpage:`crash-net(8)` and
+:manpage:`crash-task(8)` commands.
 Unless a PID or task address is specified as an argument, the output will
 reflect data concerning the current context.
 
 Other commands may simply default to the current context. For example, the
-`rd <https://crash-utility.github.io/help_pages/rd.html>`__ command can read
+:manpage:`crash-rd(8)` command can read
 memory from an address that is specified as a user-space address. Since the
-`rd <https://crash-utility.github.io/help_pages/rd.html>`__ command does not
+:manpage:`crash-rd(8)` command does not
 accept a PID or task address as an argument, it would be necessary to be aware
 that the user-space access will come from the address space of the current
 context.
@@ -1637,60 +1637,60 @@ Builtin Help
 
 Readily available help information is built into the ``crash`` utility. During
 a session, entering the
-`help <https://crash-utility.github.io/help_pages/help.html>`__ command with
+:manpage:`crash-help(8)` command with
 no argument shows the following menu:
 
 ::
 
    crash> help
 
-- `* <https://crash-utility.github.io/help_pages/pointer.html>`__
-- `files <https://crash-utility.github.io/help_pages/files.html>`__
-- `mod <https://crash-utility.github.io/help_pages/mod.html>`__
-- `runq <https://crash-utility.github.io/help_pages/runq.html>`__
-- `union <https://crash-utility.github.io/help_pages/union.html>`__
-- `alias <https://crash-utility.github.io/help_pages/alias.html>`__
-- `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__
-- `mount <https://crash-utility.github.io/help_pages/mount.html>`__
-- `search <https://crash-utility.github.io/help_pages/search.html>`__
-- `vm <https://crash-utility.github.io/help_pages/vm.html>`__
-- `ascii <https://crash-utility.github.io/help_pages/ascii.html>`__
-- `fuser <https://crash-utility.github.io/help_pages/fuser.html>`__
-- `net <https://crash-utility.github.io/help_pages/net.html>`__
-- `set <https://crash-utility.github.io/help_pages/set.html>`__
-- `vtop <https://crash-utility.github.io/help_pages/vtop.html>`__
-- `bt <https://crash-utility.github.io/help_pages/bt.html>`__
-- `gdb <https://crash-utility.github.io/help_pages/gdb.html>`__
-- `p <https://crash-utility.github.io/help_pages/p.html>`__
-- `sig <https://crash-utility.github.io/help_pages/sig.html>`__
-- `waitq <https://crash-utility.github.io/help_pages/waitq.html>`__
-- `btop <https://crash-utility.github.io/help_pages/btop.html>`__
-- `help <https://crash-utility.github.io/help_pages/help.html>`__
-- `ps <https://crash-utility.github.io/help_pages/ps.html>`__
-- `struct <https://crash-utility.github.io/help_pages/struct.html>`__
-- `whatis <https://crash-utility.github.io/help_pages/whatis.html>`__
-- `dev <https://crash-utility.github.io/help_pages/dev.html>`__
-- `irq <https://crash-utility.github.io/help_pages/irq.html>`__
-- `pte <https://crash-utility.github.io/help_pages/pte.html>`__
-- `swap <https://crash-utility.github.io/help_pages/swap.html>`__
-- `wr <https://crash-utility.github.io/help_pages/wr.html>`__
-- `dis <https://crash-utility.github.io/help_pages/dis.html>`__
-- `kmem <https://crash-utility.github.io/help_pages/kmem.html>`__
-- `ptob <https://crash-utility.github.io/help_pages/ptob.html>`__
-- `sym <https://crash-utility.github.io/help_pages/sym.html>`__
-- `q <https://crash-utility.github.io/help_pages/q.html>`__
-- `eval <https://crash-utility.github.io/help_pages/eval.html>`__
-- `list <https://crash-utility.github.io/help_pages/list.html>`__
-- `ptov <https://crash-utility.github.io/help_pages/ptov.html>`__
-- `sys <https://crash-utility.github.io/help_pages/sys.html>`__
-- `exit <https://crash-utility.github.io/help_pages/exit.html>`__
-- `log <https://crash-utility.github.io/help_pages/log.html>`__
-- `rd <https://crash-utility.github.io/help_pages/rd.html>`__
-- `task <https://crash-utility.github.io/help_pages/task.html>`__
-- `extend <https://crash-utility.github.io/help_pages/extend.html>`__
-- `mach <https://crash-utility.github.io/help_pages/mach.html>`__
-- `repeat <https://crash-utility.github.io/help_pages/repeat.html>`__
-- `timer <https://crash-utility.github.io/help_pages/timer.html>`__
+- :manpage:`crash-pointer(8)`
+- :manpage:`crash-files(8)`
+- :manpage:`crash-mod(8)`
+- :manpage:`crash-runq(8)`
+- :manpage:`crash-union(8)`
+- :manpage:`crash-alias(8)`
+- :manpage:`crash-foreach(8)`
+- :manpage:`crash-mount(8)`
+- :manpage:`crash-search(8)`
+- :manpage:`crash-vm(8)`
+- :manpage:`crash-ascii(8)`
+- :manpage:`crash-fuser(8)`
+- :manpage:`crash-net(8)`
+- :manpage:`crash-set(8)`
+- :manpage:`crash-vtop(8)`
+- :manpage:`crash-bt(8)`
+- :manpage:`crash-gdb(8)`
+- :manpage:`crash-p(8)`
+- :manpage:`crash-sig(8)`
+- :manpage:`crash-waitq(8)`
+- :manpage:`crash-btop(8)`
+- :manpage:`crash-help(8)`
+- :manpage:`crash-ps(8)`
+- :manpage:`crash-struct(8)`
+- :manpage:`crash-whatis(8)`
+- :manpage:`crash-dev(8)`
+- :manpage:`crash-irq(8)`
+- :manpage:`crash-pte(8)`
+- :manpage:`crash-swap(8)`
+- :manpage:`crash-wr(8)`
+- :manpage:`crash-dis(8)`
+- :manpage:`crash-kmem(8)`
+- :manpage:`crash-ptob(8)`
+- :manpage:`crash-sym(8)`
+- :manpage:`crash-q(8)`
+- :manpage:`crash-eval(8)`
+- :manpage:`crash-list(8)`
+- :manpage:`crash-ptov(8)`
+- :manpage:`crash-sys(8)`
+- :manpage:`crash-exit(8)`
+- :manpage:`crash-log(8)`
+- :manpage:`crash-rd(8)`
+- :manpage:`crash-task(8)`
+- :manpage:`crash-extend(8)`
+- :manpage:`crash-mach(8)`
+- :manpage:`crash-repeat(8)`
+- :manpage:`crash-timer(8)`
 
 ::
 
@@ -1706,9 +1706,9 @@ clicking on the command name above. Each help page details the syntax of the
 command and its available options, a description of the command in general, a
 description of each option, and a set of examples. During a ``crash`` session,
 a command's help page can be displayed by entering
-`help <https://crash-utility.github.io/help_pages/help.html>`__ followed by
+:manpage:`crash-help(8)` followed by
 the command name. So, for example, to get help on how to use the
-`set <https://crash-utility.github.io/help_pages/set.html>`__ command:
+:manpage:`crash-set(8)` command:
 
 ::
 
@@ -1912,7 +1912,7 @@ to display kernel data structures symbolically.
    * - **Command**
      - **Description**
 
-   * - `struct <https://crash-utility.github.io/help_pages/struct.html>`__
+   * - :manpage:`crash-struct(8)`
      - Displays a formatted kernel data structure type located at a given address, or
        at an address referred to by a symbol; if no address is specified, the
        structure definition is displayed. The output can be narrowed down to a
@@ -1925,32 +1925,32 @@ to display kernel data structures symbolically.
        2. If a structure name is entered as the first token on a command line, the
           "``struct``" command is actually not necessary.
 
-   * - `union <https://crash-utility.github.io/help_pages/union.html>`__
+   * - :manpage:`crash-union(8)`
      - Same as ``struct`` command, but used for kernel data types defined as unions
        instead of structures..
 
-   * - `* <https://crash-utility.github.io/help_pages/pointer.html>`__
+   * - :manpage:`crash-pointer(8)`
      - "Pointer-to" command which can be used in lieu of entering ``struct`` or
        ``union``; the ``gdb`` module first determines whether the argument is a
        structure or a union, and then calls the appropriate function.
 
-   * - `p <https://crash-utility.github.io/help_pages/p.html>`__
+   * - :manpage:`crash-p(8)`
      - Displays the contents of a kernel variable; the arguments are passed on to
        ``gdb``'s ``print`` command for proper formatting. Two builtin aliases, ``px``
        and ``pd``, set the numerical output radix to hexadecimal or decimal for the
        print operation, temporarily overriding the current default.
 
-   * - `whatis <https://crash-utility.github.io/help_pages/whatis.html>`__
+   * - :manpage:`crash-whatis(8)`
      - Displays all available symbol table information concerning a data type or a
        data symbol.
 
-   * - `sym <https://crash-utility.github.io/help_pages/sym.html>`__
+   * - :manpage:`crash-sym(8)`
      - Translates a kernel symbol name to its kernel virtual address and section, or
        a kernel virtual address to its symbol name and section. It can also be used
        to dump the complete list of kernel symbols, or to query the symbol list for
        all symbols containing a given sub-string.
 
-   * - `dis <https://crash-utility.github.io/help_pages/dis.html>`__
+   * - :manpage:`crash-dis(8)`
      - Disassembles the text of complete kernel function, or from a specified address
        for a given number of instructions, or from the beginning of a function up to
        a specified address.
@@ -1973,19 +1973,19 @@ or task address is specified as an argument.
    * - **Command**
      - **Description**
 
-   * - `bt <https://crash-utility.github.io/help_pages/bt.html>`__
+   * - :manpage:`crash-bt(8)`
      - Arguably the most useful ``crash`` command, ``bt`` displays a task's kernel
        stack back-trace, including full exception frame dumps. It is
        context-sensitive, although the ``-a`` option will display the stack traces of
        the active task on each CPU. This command is often used within the
-       `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__ wrapper
+       :manpage:`crash-foreach(8)` wrapper
        command in order to display the back traces of all tasks with one command.
 
-   * - `dev <https://crash-utility.github.io/help_pages/dev.html>`__
+   * - :manpage:`crash-dev(8)`
      - Displays data concerning the character and block device assignments, I/O port
        usage, I/O memory usage, and PCI device data.
 
-   * - `files <https://crash-utility.github.io/help_pages/files.html>`__
+   * - :manpage:`crash-files(8)`
      - This context-sensitive command displays the task's current root directory and
        working directories, and then for each open file descriptor, shows:
 
@@ -2003,18 +2003,18 @@ or task address is specified as an argument.
        - the file's full pathname
 
        It can be called from the
-       `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__ wrapper
+       :manpage:`crash-foreach(8)` wrapper
        command.
 
-   * - `fuser <https://crash-utility.github.io/help_pages/fuser.html>`__
+   * - :manpage:`crash-fuser(8)`
      - Displays a list of tasks that reference a specified filename or ``inode``
        address as the current root or working directory, an open file descriptor, or
        which mmap the file.
 
-   * - `irq <https://crash-utility.github.io/help_pages/irq.html>`__
+   * - :manpage:`crash-irq(8)`
      - Display data concerning interrupt request numbers and bottom-half handling.
 
-   * - `kmem <https://crash-utility.github.io/help_pages/kmem.html>`__
+   * - :manpage:`crash-kmem(8)`
      - This command has numerous options that delve into the state of several kernel
        memory subsystems:
 
@@ -2031,19 +2031,19 @@ or task address is specified as an argument.
        subsystem, the free list, the ``page_hash_table``, the ``vmlist``, and the
        ``mem_map`` array, displaying where it was found.
 
-   * - `log <https://crash-utility.github.io/help_pages/log.html>`__
+   * - :manpage:`crash-log(8)`
      - Dumps the kernel message buffer chronologically, accounting for any
        wrap-around.
 
-   * - `mach <https://crash-utility.github.io/help_pages/mach.html>`__
+   * - :manpage:`crash-mach(8)`
      - Displays machine and/or processor specific data.
 
-   * - `mod <https://crash-utility.github.io/help_pages/mod.html>`__
+   * - :manpage:`crash-mod(8)`
      - Displays the list of currently-loaded kernel modules. More importantly, it
        loads the debug data from the module object files if they are available,
        allowing symbolic debugging capability of kernel modules.
 
-   * - `mount <https://crash-utility.github.io/help_pages/mount.html>`__
+   * - :manpage:`crash-mount(8)`
      - For each mounted filesystem, or for just a specified filesystem, displays:
 
        - its ``vfsmount`` struct address
@@ -2056,7 +2056,7 @@ or task address is specified as an argument.
        inodes. Filesystems may be specified by ``vfsmount``, ``super_block``, or
        ``inode`` addresses, or by device name or mount point names.
 
-   * - `net <https://crash-utility.github.io/help_pages/net.html>`__
+   * - :manpage:`crash-net(8)`
      - Displays various network-related data:
 
        - displays each configured network device's ``net_device`` address, its name,
@@ -2067,10 +2067,10 @@ or task address is specified as an argument.
          standard numbers-and-dots notation
 
        It can be called from the
-       `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__ wrapper
+       :manpage:`crash-foreach(8)` wrapper
        command.
 
-   * - `ps <https://crash-utility.github.io/help_pages/ps.html>`__
+   * - :manpage:`crash-ps(8)`
      - Useful process status command, in typical Linux ``ps`` command type output,
        containing:
 
@@ -2087,15 +2087,15 @@ or task address is specified as an argument.
        Also has an option to show a task's parental hierarchy back to the ``init``
        process, and another to show all children of a task.
 
-   * - `pte <https://crash-utility.github.io/help_pages/pte.html>`__
+   * - :manpage:`crash-pte(8)`
      - This command translates the contents of a PTE into its physical page address
        and page bit settings, or if it references a swap location, the swap device
        and offset.
 
-   * - `runq <https://crash-utility.github.io/help_pages/runq.html>`__
+   * - :manpage:`crash-runq(8)`
      - Displays list of tasks on the run queue.
 
-   * - `sig <https://crash-utility.github.io/help_pages/sig.html>`__
+   * - :manpage:`crash-sig(8)`
      - A context-sensitive command which displays a task's signal information,
        including:
 
@@ -2107,14 +2107,14 @@ or task address is specified as an argument.
        Other options list the signal number/names combination for a processor type,
        and translate the contents of a ``sigset_t`` into the signal names whose bits
        are set. It can be called from the
-       `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__ wrapper
+       :manpage:`crash-foreach(8)` wrapper
        command.
 
-   * - `swap <https://crash-utility.github.io/help_pages/swap.html>`__
+   * - :manpage:`crash-swap(8)`
      - For each configured swap device, this command displays the same data that is
        shown by the Linux command ``swapon -s``.
 
-   * - `sys <https://crash-utility.github.io/help_pages/sys.html>`__
+   * - :manpage:`crash-sys(8)`
      - Re-displays the same system-related data that is seen during ``crash``
        initialization:
 
@@ -2134,20 +2134,20 @@ or task address is specified as an argument.
        Other options display information concerning the system call table, and one
        allows the ``root`` user to panic a live system.
 
-   * - `task <https://crash-utility.github.io/help_pages/task.html>`__
+   * - :manpage:`crash-task(8)`
      - This context-sensitive command displays a task's complete ``task_struct``
        contents, or one or more members of the structure. This command is often used
        within the
-       `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__ wrapper
+       :manpage:`crash-foreach(8)` wrapper
        command in order to display ``task_struct`` data for all tasks with one
        command.
 
-   * - `timer <https://crash-utility.github.io/help_pages/timer.html>`__
+   * - :manpage:`crash-timer(8)`
      - Displays the timer queue entries in chronological order, listing the target
        function names, the current value of ``jiffies``, and the expiration time of
        each entry.
 
-   * - `vm <https://crash-utility.github.io/help_pages/vm.html>`__
+   * - :manpage:`crash-vm(8)`
      - This powerful, context-sensitive command displays a wealth of information
        concerning a task's virtual memory data, including:
 
@@ -2163,10 +2163,10 @@ or task address is specified as an argument.
        Other options translate the flags of a ``vm_area_struct``, or display the full
        contents of a task's ``mm_struct`` or of each ``vm_area_struct``. It can be
        called from the
-       `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__ wrapper
+       :manpage:`crash-foreach(8)` wrapper
        command.
 
-   * - `vtop <https://crash-utility.github.io/help_pages/vtop.html>`__
+   * - :manpage:`crash-vtop(8)`
      - This context-sensitive command translates a user or kernel virtual address to
        its physical address. Also displayed are:
 
@@ -2177,10 +2177,10 @@ or task address is specified as an argument.
          mapped
 
        It can be called from the
-       `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__ wrapper
+       :manpage:`crash-foreach(8)` wrapper
        command.
 
-   * - `waitq <https://crash-utility.github.io/help_pages/waitq.html>`__
+   * - :manpage:`crash-waitq(8)`
      - Lists the tasks linked on a specified kernel wait queue.
 
 .. _UTILITY_FUNCTIONS:
@@ -2198,19 +2198,19 @@ purposes, some simple, others quite powerful.
    * - **Command**
      - **Description**
 
-   * - `ascii <https://crash-utility.github.io/help_pages/ascii.html>`__
+   * - :manpage:`crash-ascii(8)`
      - Translates a numerical value into its ASCII components; with no arguments,
        displays an ASCII chart.
 
-   * - `btop <https://crash-utility.github.io/help_pages/btop.html>`__
+   * - :manpage:`crash-btop(8)`
      - Translates a byte value (physical address) to its page number.
 
-   * - `eval <https://crash-utility.github.io/help_pages/eval.html>`__
+   * - :manpage:`crash-eval(8)`
      - A simple calculator, evaluates an expression and displays the result in
        hexadecimal, decimal, octal and binary, and optionally showing the bit numbers
        set in the result.
 
-   * - `list <https://crash-utility.github.io/help_pages/list.html>`__
+   * - :manpage:`crash-list(8)`
      - Dumps the entries of a linked list of structures. It can handle lists of
        structures that are singly-linked with simple "next" pointers, or those with
        embedded ``list_head`` structures. The output may be constrained to simply
@@ -2219,24 +2219,24 @@ purposes, some simple, others quite powerful.
        list entries are hashed, so a corrupted list that loops back upon itself will
        be recognized.
 
-   * - `ptob <https://crash-utility.github.io/help_pages/ptob.html>`__
+   * - :manpage:`crash-ptob(8)`
      - translates a page frame number to its byte value (physical address).
 
-   * - `ptov <https://crash-utility.github.io/help_pages/ptov.html>`__
+   * - :manpage:`crash-ptov(8)`
      - Translates a physical address into a kernel virtual address by adding the
        appropriate ``PAGE_OFFSET`` value.
 
-   * - `search <https://crash-utility.github.io/help_pages/search.html>`__
+   * - :manpage:`crash-search(8)`
      - Searches a range of user or kernel memory space for given value, with an
        optional "don't care" bit-mask argument.
 
-   * - `rd <https://crash-utility.github.io/help_pages/rd.html>`__
+   * - :manpage:`crash-rd(8)`
      - Displays a specified amount of user virtual, kernel virtual, or physical
        memory in several formats, such as 8, 16, 32 or 64 bit values, hexadecimal or
        decimal, symbolically, and with ASCII translations. When reading user virtual
        addresses, the command is context-sensitive.
 
-   * - `wr <https://crash-utility.github.io/help_pages/wr.html>`__
+   * - :manpage:`crash-wr(8)`
      - Modifies the contents of memory on a live system. Write permission on
        ``/dev/mem`` is required; this command should obviously be used with great
        care. The write operation is constrained to one 8, 16, 32 or 64 bit location.
@@ -2256,21 +2256,21 @@ session.
    * - **Command**
      - **Description**
 
-   * - `alias <https://crash-utility.github.io/help_pages/alias.html>`__
+   * - :manpage:`crash-alias(8)`
      - Creates a single-word alias for a command string. Several aliases are built
        into ``crash``; user-defined aliases may also be defined in a ``.crashrc``
        file, or during a ``crash`` session by entering it on the command line or
        reading it from an input file.
 
-   * - `exit <https://crash-utility.github.io/help_pages/exit.html>`__
+   * - :manpage:`crash-exit(8)`
      - Shuts down the ``crash`` session (same as
-       `q <https://crash-utility.github.io/help_pages/q.html>`__).
+       :manpage:`crash-q(8)`).
 
-   * - `extend <https://crash-utility.github.io/help_pages/extend.html>`__
+   * - :manpage:`crash-extend(8)`
      - Extend the ``crash`` command set by dynamically loading a shared object
        library containing one or more user-written commands.
 
-   * - `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__
+   * - :manpage:`crash-foreach(8)`
      - Quite often it is helpful, or even necessary, to run the same ``crash``
        context-sensitive command on a number of tasks by just entering one command.
        This wrapper command sets off the execution of a given ``crash`` command on
@@ -2289,39 +2289,39 @@ session.
        combination of PIDs, task addresses, and command names. The context-sensitive
        commands that can be issued to the selected tasks are:
 
-       - `bt <https://crash-utility.github.io/help_pages/bt.html>`__
-       - `vm <https://crash-utility.github.io/help_pages/vm.html>`__
-       - `task <https://crash-utility.github.io/help_pages/task.html>`__
-       - `files <https://crash-utility.github.io/help_pages/files.html>`__
-       - `net <https://crash-utility.github.io/help_pages/net.html>`__
-       - `set <https://crash-utility.github.io/help_pages/set.html>`__
-       - `sig <https://crash-utility.github.io/help_pages/sig.html>`__
-       - `vtop <https://crash-utility.github.io/help_pages/vtop.html>`__
+       - :manpage:`crash-bt(8)`
+       - :manpage:`crash-vm(8)`
+       - :manpage:`crash-task(8)`
+       - :manpage:`crash-files(8)`
+       - :manpage:`crash-net(8)`
+       - :manpage:`crash-set(8)`
+       - :manpage:`crash-sig(8)`
+       - :manpage:`crash-vtop(8)`
 
        A header containing the PID, task address, CPU and command name will be
        pre-pended before the command output for each selected task.
 
-   * - `gdb <https://crash-utility.github.io/help_pages/gdb.html>`__
+   * - :manpage:`crash-gdb(8)`
      - This command passes its arguments directly to ``gdb`` for processing. This is
        typically not necessary, but where ambiguities between ``crash`` and ``gdb``
        command names exist, this will force the command to be executed by ``gdb``.
 
-   * - `repeat <https://crash-utility.github.io/help_pages/repeat.html>`__
+   * - :manpage:`crash-repeat(8)`
      - This wrapper command repeats a ``crash`` command indefinitely, optionally
        delaying a given number of seconds between each command execution. Obviously
        this command is only useful when running on a live system.
 
-   * - `set <https://crash-utility.github.io/help_pages/set.html>`__
+   * - :manpage:`crash-set(8)`
      - This primary purpose for this command is to set the ``crash`` context to a new
        task, or to display the current context. It can also be used to view or change
        one of a set of internal ``crash`` variables that modify program behavior,
        such as the default output radix or scrolling behavior. It can be called from
-       the `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__
+       the :manpage:`crash-foreach(8)`
        wrapper command for viewing the context data of each task.
 
-   * - `q <https://crash-utility.github.io/help_pages/q.html>`__
+   * - :manpage:`crash-q(8)`
      - Shuts down the ``crash`` session (same as
-       `exit <https://crash-utility.github.io/help_pages/exit.html>`__).
+       :manpage:`crash-exit(8)`).
 
 .. _EXAMPLES:
 
@@ -2340,7 +2340,7 @@ following commands are typically the most commonly-used:
    .. list-table::
       :widths: 8 92
 
-      * - `bt <https://crash-utility.github.io/help_pages/bt.html>`__
+      * - :manpage:`crash-bt(8)`
         - Display the backtrace of the current context, or as specified with arguments.
           This command is typically the first command entered after starting a dumpfile
           session. Since the initial context is the panic context, it will show the
@@ -2348,10 +2348,10 @@ following commands are typically the most commonly-used:
           of the *active* task on each CPU, since there may be an interrelationship
           between the panicking task on one CPU and the running task(s) on the other
           CPU(s). When ``bt`` is given as the argument to
-          `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__.
+          :manpage:`crash-foreach(8)`.
           displays the backtraces of *all* tasks.
 
-      * - `struct <https://crash-utility.github.io/help_pages/struct.html>`__
+      * - :manpage:`crash-struct(8)`
         - Print the contents of a data structure at a specified address. This command is
           so common that it is typically unnecessary to enter the ``struct`` command
           name on the command line; if the first command line argument is not a
@@ -2367,46 +2367,46 @@ following commands are typically the most commonly-used:
 
              crash> vm_area_struct d3cb2600
 
-      * - `set <https://crash-utility.github.io/help_pages/set.html>`__
+      * - :manpage:`crash-set(8)`
         - Set a new task context by PID, task address, or cpu. Since several ``crash``
           commands are context-sensitive, it's helpful to be able to change the context
           to avoid having to pass the PID or task address to those context-sensitive
           commands in order to access the data of a task that is *not* the current
           context.
 
-      * - `p <https://crash-utility.github.io/help_pages/p.html>`__
+      * - :manpage:`crash-p(8)`
         - Prints the contents of a kernel variable; since it's a gateway to the
           ``print`` command of the mbedded ``gdb`` module, it can also be used to print
           complex C language expressions.
 
-      * - `rd <https://crash-utility.github.io/help_pages/rd.html>`__
+      * - :manpage:`crash-rd(8)`
         - Read memory, which may be either kernel virtual, user virtual, or physical,
           and display it several different formats and sizes.
 
-      * - `ps <https://crash-utility.github.io/help_pages/ps.html>`__
+      * - :manpage:`crash-ps(8)`
         - Lists basic task information for each process; it can also display parent and
           child hierarchies.
 
-      * - `log <https://crash-utility.github.io/help_pages/log.html>`__
+      * - :manpage:`crash-log(8)`
         - Dump the kernel ``log_buf``, which often contains clues leading up to a
           subsequent kernel crash.
 
-      * - `foreach <https://crash-utility.github.io/help_pages/foreach.html>`__
+      * - :manpage:`crash-foreach(8)`
         - Execute a ``crash`` command on all tasks, or those specified, in the system;
-          can be used with `bt <https://crash-utility.github.io/help_pages/bt.html>`__,
-          `vm <https://crash-utility.github.io/help_pages/vm.html>`__,
-          `task <https://crash-utility.github.io/help_pages/task.html>`__,
-          `files <https://crash-utility.github.io/help_pages/files.html>`__,
-          `net <https://crash-utility.github.io/help_pages/net.html>`__,
-          `set <https://crash-utility.github.io/help_pages/set.html>`__,
-          `sig <https://crash-utility.github.io/help_pages/sig.html>`__ and
-          `vtop <https://crash-utility.github.io/help_pages/vtop.html>`__.
+          can be used with :manpage:`crash-bt(8)`,
+          :manpage:`crash-vm(8)`,
+          :manpage:`crash-task(8)`,
+          :manpage:`crash-files(8)`,
+          :manpage:`crash-net(8)`,
+          :manpage:`crash-set(8)`,
+          :manpage:`crash-sig(8)` and
+          :manpage:`crash-vtop(8)`.
 
-      * - `files <https://crash-utility.github.io/help_pages/files.html>`__
+      * - :manpage:`crash-files(8)`
         - Dump the open file descriptor data of a task; most usefully, the ``file``,
           ``dentry`` and ``inode`` structure addresses for each open file descriptor.
 
-      * - `vm <https://crash-utility.github.io/help_pages/vm.html>`__
+      * - :manpage:`crash-vm(8)`
         - Dump the virtual memory map of a task, including the vital information
           concerning each ``vm_area_struct`` making up a task's address space. It can
           also dump the physical address of each page in the address space, or if not
@@ -2503,7 +2503,7 @@ Since the semaphore mechanism was seemingly not working, it was first
 necessary to look at the actual ``semaphore`` structure associated with the
 pipe's inode. This first required looking at the first argument to the
 ``pipe_read()`` function; the
-`whatis <https://crash-utility.github.io/help_pages/whatis.html>`__ command
+:manpage:`crash-whatis(8)` command
 shows that it is a ``struct file`` pointer:
 
 ::
@@ -2512,7 +2512,7 @@ shows that it is a ``struct file`` pointer:
    ssize_t pipe_read(struct file *, char *, size_t, loff_t *);
    crash>
 
-Using the `bt -f <https://crash-utility.github.io/help_pages/bt.html>`__
+Using the :manpage:`crash-bt(8)`
 option, each frame in the backtrace is expanded to show all stack data in the
 frame. Looking at the expansion of the ``sys_read()`` frame, we can see that
 the last thing pushed on the stack before calling ``pipe_read()`` was the
@@ -2540,7 +2540,7 @@ The task at hand is finding the inode containing the suspect semaphore from
 the ``file`` structure address. The ``file`` structure's ``f_dentry`` member
 points to its ``dentry`` structure, whose ``d_inode`` member in turn points to
 the pipe's ``inode``. The
-`struct <https://crash-utility.github.io/help_pages/struct.html>`__ command
+:manpage:`crash-struct(8)` command
 can be used to dump the complete contents of a data structure at a given
 address; by tagging the ``.member`` onto the structure name, we can print just
 the member desired. By following the structure chain, the inode address can be
@@ -2578,7 +2578,7 @@ tasks access to the pipe at the same time.
 
 (As an aside, determining the inode address above could also be accomplished
 by using the context-sensitive
-`files <https://crash-utility.github.io/help_pages/files.html>`__ command,
+:manpage:`crash-files(8)` command,
 which dumps the associated ``file``, ``dentry`` and ``inode`` structure
 addresses for each open file descriptor of a task. The dumped file descriptor
 list would contain one with a reference to the ``file`` structure at
@@ -2597,7 +2597,7 @@ received an inode with a bogus counter value.
 
 Confirming the existence of bogus inode structures in the slab cache was a
 multi-stepped procedure. Using the command
-`kmem <https://crash-utility.github.io/help_pages/kmem.html>`__ command to
+:manpage:`crash-kmem(8)` command to
 access the inode slab cache, we can get the addresses of all free and
 currently-allocated inodes. Since there are typically several thousand inodes,
 the output is extremely verbose, but here is the beginning of it:
@@ -2642,7 +2642,7 @@ addresses (i.e., output lines starting with three spaces), and
 :ref:`redirected them into a file <REDIRECT_OUTPUT>`. The file was modified to
 be a ``crash`` :ref:`input file <COMMAND_LINE_FROM_FILE>` by making each
 extracted inode address to be the arguments of the
-`struct <https://crash-utility.github.io/help_pages/struct.html>`__ command,
+:manpage:`crash-struct(8)` command,
 using its :ref:`short-cut <SHORT_CUT>` method that allows the dropping of the
 ``struct`` command name; therefore the input file contained hundreds of
 ``crash`` commands of the form:
@@ -2658,15 +2658,15 @@ using its :ref:`short-cut <SHORT_CUT>` method that allows the dropping of the
    ...
 
 Note that the
-`struct <https://crash-utility.github.io/help_pages/struct.html>`__ command
+:manpage:`crash-struct(8)` command
 would be used by default above, as documented in its help page; if the first
 command line argument is not a ``crash`` or ``gdb`` command, but it *is* the
 name of a known data structure, it passes the arguments to the
-`struct <https://crash-utility.github.io/help_pages/struct.html>`__ command.
+:manpage:`crash-struct(8)` command.
 
 Using the capability of feeding an :ref:`input file <COMMAND_LINE_FROM_FILE>`,
 in this case consisting of hundreds of short-cut
-`struct <https://crash-utility.github.io/help_pages/struct.html>`__ commands
+:manpage:`crash-struct(8)` commands
 like those above, the output was again quite verbose, consisting of structure
 member dumps of the form:
 
@@ -2738,7 +2738,7 @@ functionality:
    executable,
 2. :ref:`creating a shared object <SHARED_LIBRARY>` library that can be
    dynamically loaded by using the
-   `extend <https://crash-utility.github.io/help_pages/extend.html>`__ command.
+   :manpage:`crash-extend(8)` command.
 
 This section consists of a quick guide that describes how to get started using
 both methods.
@@ -2749,7 +2749,7 @@ Adding new code and compiling it into the ``crash`` executable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The current set of ``crash`` commands can be seen by entering the
-`help <https://crash-utility.github.io/help_pages/help.html>`__ command with
+:manpage:`crash-help(8)` command with
 no arguments:
 
 ::
@@ -2996,7 +2996,7 @@ mechanisms.
 
 .. _SHARED_LIBRARY:
 
-Creating a shared object library and loading it with `extend <https://crash-utility.github.io/help_pages/extend.html>`__
+Creating a shared object library and loading it with :manpage:`crash-extend(8)`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 While adding a new command and/or command option in the manner above is
@@ -3005,11 +3005,11 @@ release of the ``crash`` utility. Since that could become tedious, another
 extension mechanism exists in which share objects containing one or more
 ``crash`` commands can be written, and then dynamically attached to a running
 ``crash`` session, using the
-`extend <https://crash-utility.github.io/help_pages/extend.html>`__ command.
+:manpage:`crash-extend(8)` command.
 Once loaded, the command(s) in the shared object library automatically appear
 in the help menu, as if they were compiled into the ``crash`` executable. As
 an quick aid in creating a shared object, the help page for the
-`extend <https://crash-utility.github.io/help_pages/extend.html>`__ contains
+:manpage:`crash-extend(8)` contains
 an example C program tagged onto the end, which adds a new ``echo`` command
 (which simply echoes back all arguments). The C program piece can be cut and
 pasted into a file, say ``echo.c`` for example, and then compiled like so:
@@ -3029,7 +3029,7 @@ and ``-m64`` on ppc64. So for an x86 build, the compile line would be:
 
 The resultant ``echo.so`` file may be dynamically linked into ``crash`` during
 runtime using the
-`extend <https://crash-utility.github.io/help_pages/extend.html>`__ command:
+:manpage:`crash-extend(8)` command:
 
 ::
 
