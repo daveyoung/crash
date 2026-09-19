@@ -4,47 +4,54 @@
 .SH NAME
 crash-dev \- device data
 .SH SYNOPSIS
-.in 0
-.nf
-dev [-i | -p | -d | -D ] [-V | -v index [file]]
-.fi
-.in
+.B dev
+[-i | -p | -d | -D ] [-V | -v index [file]]
 .SH DESCRIPTION
-.in 0
-.nf
-  If no argument is entered, this command dumps character and block
-  device data.
-
-    -i  display I/O port usage; on 2.4 kernels, also display I/O memory usage.
-    -p  display PCI device data.
-    -d  display disk I/O statistics:
-         TOTAL: total number of allocated in-progress I/O requests
-          SYNC: I/O requests that are synchronous
-         ASYNC: I/O requests that are asynchronous
-          READ: I/O requests that are reads (older kernels)
-         WRITE: I/O requests that are writes (older kernels)
-           DRV: I/O requests that are in-flight in the device driver.
-                If the device driver uses blk-mq interface, this field
-                shows N/A(MQ).  If not available, this column is not shown.
-    -D  same as -d, but filter out disks with no in-progress I/O requests.
- 
-  If the dumpfile contains device dumps:
-        -V  display an indexed list of all device dumps present in the vmcore,
-            showing their file offset, size and name.
-  -v index  select and display one device dump based upon an index value
-            shown by the -V option, shown in a default human-readable format;
-            alternatively, the "rd -f" option along with its various format
-            options may be used to further tailor the output.
-      file  only used with -v, copy the device dump data to a file.
-.fi
-.in
+.PP
+If no argument is entered, this command dumps character and block
+device data.
+.TP
+.BI \-i
+display I/O port usage; on 2.4 kernels, also display I/O memory usage.
+.TP
+.BI \-p
+display PCI device data.
+.TP
+.BI \-d
+display disk I/O statistics:
+TOTAL: total number of allocated in-progress I/O requests
+SYNC: I/O requests that are synchronous
+ASYNC: I/O requests that are asynchronous
+READ: I/O requests that are reads (older kernels)
+WRITE: I/O requests that are writes (older kernels)
+DRV: I/O requests that are in-flight in the device driver.
+If the device driver uses blk-mq interface, this field
+shows N/A(MQ).  If not available, this column is not shown.
+.TP
+.BI \-D
+same as -d, but filter out disks with no in-progress I/O requests.
+.PP
+If the dumpfile contains device dumps:
+.TP
+.BI \-V
+display an indexed list of all device dumps present in the vmcore,
+showing their file offset, size and name.
+.TP
+.BI \-v \ index
+select and display one device dump based upon an index value
+shown by the -V option, shown in a default human-readable format;
+alternatively, the "rd -f" option along with its various format
+options may be used to further tailor the output.
+file  only used with -v, copy the device dump data to a file.
 .SH EXAMPLES
-.in 0
+.PP
+Display character and block device data:
 .nf
-  Display character and block device data:
-
     crash> dev
-    CHRDEV    NAME              CDEV    OPERATIONS
+.fi
+.PP
+.B CHRDEV    NAME              CDEV    OPERATIONS
+.nf
        1      mem             f79b83c0  memory_fops
        4      /dev/vc/0       c07bc560  console_fops
        4      tty             f7af5004  tty_fops
@@ -65,32 +72,35 @@ dev [-i | -p | -d | -D ] [-V | -v index [file]]
      189      usb_device      c06a0300  usbfs_device_file_operations
      216      rfcomm          f5961a04  tty_fops
      254      pcmcia          f79b82c0  ds_fops
-    
-    BLKDEV    NAME             GENDISK  OPERATIONS
+.fi
+.PP
+.B BLKDEV    NAME             GENDISK  OPERATIONS
+.nf
        1      ramdisk         f7b23480  rd_bd_op
        8      sd              f7cab280  sd_fops
        9      md              f7829b80  md_fops
       11      sr              f75c24c0  sr_bdops
-      65      sd               (none)  
-      66      sd               (none)  
-      67      sd               (none)  
-      68      sd               (none)  
-      69      sd               (none)  
-      70      sd               (none)  
-      71      sd               (none)  
-     128      sd               (none)  
-     129      sd               (none)  
-     130      sd               (none)  
-     131      sd               (none)  
-     132      sd               (none)  
-     133      sd               (none)  
-     134      sd               (none)  
-     135      sd               (none)  
+      65      sd               (none)
+      66      sd               (none)
+      67      sd               (none)
+      68      sd               (none)
+      69      sd               (none)
+      70      sd               (none)
+      71      sd               (none)
+     128      sd               (none)
+     129      sd               (none)
+     130      sd               (none)
+     131      sd               (none)
+     132      sd               (none)
+     133      sd               (none)
+     134      sd               (none)
+     135      sd               (none)
      253      device-mapper   c57a0ac0  dm_blk_dops
-     254      mdp              (none)  
-
-  Display PCI data:
-
+     254      mdp              (none)
+.fi
+.PP
+Display PCI data:
+.nf
     crash> dev -p
     PCI_DEV  BU:SL.FN CLASS: VENDOR-DEVICE
     c00051c0 00:00.0  Host bridge: Intel 440BX - 82443BX Host
@@ -104,11 +114,15 @@ dev [-i | -p | -d | -D ] [-V | -v index [file]]
     c0005640 01:00.0  VGA compatible controller: NVidia [PCI_DEVICE 28]
     c00056d0 02:0a.0  SCSI storage controller: Adaptec AIC-7890/1
     c0005760 02:0e.0  SCSI storage controller: Adaptec AIC-7880U
-
-  Display I/O port and I/O memory usage:
-
+.fi
+.PP
+Display I/O port and I/O memory usage:
+.nf
     crash> dev -i
-    RESOURCE    RANGE    NAME
+.fi
+.PP
+.B RESOURCE    RANGE    NAME
+.nf
     c03036d4  0000-ffff  PCI IO
     c0302594  0000-001f  dma1
     c03025b0  0020-003f  pic1
@@ -135,8 +149,10 @@ dev [-i | -p | -d | -D ] [-V | -v index [file]]
     c1237858  e800-e8ff  Adaptec AIC-7880U
     c1237458  ec00-ecff  Adaptec AHA-2940U2/W / 7890
     c1239cc8  ffa0-ffaf  Intel Corporation 82371AB PIIX4 IDE
-    
-    RESOURCE        RANGE        NAME
+.fi
+.PP
+.B RESOURCE        RANGE        NAME
+.nf
     c03036f0  00000000-ffffffff  PCI mem
     c0004000  00000000-0009ffff  System RAM
     c03026ac  000a0000-000bffff  Video RAM area
@@ -165,9 +181,10 @@ dev [-i | -p | -d | -D ] [-V | -v index [file]]
     c0004080  fec00000-fec0ffff  reserved
     c00040a0  fee00000-fee0ffff  reserved
     c00040c0  ffe00000-ffffffff  reserved
-
-  Display disk I/O statistics:
-
+.fi
+.PP
+Display disk I/O statistics:
+.nf
     crash> dev -d
     MAJOR GENDISK            NAME     REQUEST_QUEUE      TOTAL  READ WRITE   DRV
         2 ffff81012d8a5000   fd0      ffff81012dc053c0      12     0    12     0
@@ -175,28 +192,35 @@ dev [-i | -p | -d | -D ] [-V | -v index [file]]
         8 ffff81012dd71000   sda      ffff81012d8af040       6     0     6     6
         8 ffff81012dc77000   sdb      ffff81012d8b5740       0     0     0     0
         8 ffff81012d8d0c00   sdc      ffff81012d8ae9c0       0     0     0     0
-
-  Display the available device dumps:
-
+.fi
+.PP
+Display the available device dumps:
+.nf
     crash> dev -V
-    INDEX  OFFSET             SIZE             NAME
+.fi
+.PP
+.B INDEX  OFFSET             SIZE             NAME
+.nf
       0    0x240              33558464         cxgb4_0000:02:00.4
       1    0x2001240          33558464         cxgb4_0000:03:00.4
-
-  Extract a specified device dump to file:
-
+.fi
+.PP
+Extract a specified device dump to file:
+.nf
     crash> dev -v 0 device_dump_0.bin
     DEVICE: cxgb4_0000:02:00.4
     33558464 bytes copied from 0x240 to device_dump_0.bin
-
-  Format and display a device's dump data to the screen using the "rd" command:
-
+.fi
+.PP
+Format and display a device's dump data to the screen using the "rd" command:
+.nf
     crash> rd -f 0x240 -32 8
     240:  040b69e2 00000038 000e0001 00675fd4   .i..8........_g.
     250:  00000000 21600047 00000000 00000000   ....G.`!........
-
-  Display a device's dump data to the screen using the default format:
-
+.fi
+.PP
+Display a device's dump data to the screen using the default format:
+.nf
     crash> dev -v 1
     DEVICE: cxgb4_0000:03:00.4
              2001240:  00000038040b69e2 00af985c000e0001   .i..8.......\e...
@@ -206,4 +230,5 @@ dev [-i | -p | -d | -D ] [-V | -v index [file]]
              2001280:  00000000000027b0 0000000000000000   .'..............
     ...
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

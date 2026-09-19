@@ -4,30 +4,24 @@
 .SH NAME
 crash-ascii \- translate a hexadecimal string to ASCII
 .SH SYNOPSIS
-.in 0
-.nf
-ascii value ...
-.fi
-.in
+.B ascii
+value ...
 .SH DESCRIPTION
-.in 0
-.nf
-  Translates 32-bit or 64-bit hexadecimal values to ASCII.  If no argument
-  is entered, an ASCII chart is displayed.
-.fi
-.in
+.PP
+Translates 32-bit or 64-bit hexadecimal values to ASCII.  If no argument
+is entered, an ASCII chart is displayed.
 .SH EXAMPLES
-.in 0
+.PP
+Translate the hexadecimal value of 0x62696c2f7273752f to ASCII:
 .nf
-  Translate the hexadecimal value of 0x62696c2f7273752f to ASCII:
-
     crash> ascii 62696c2f7273752f
     62696c2f7273752f: /usr/lib
-
-  Display an ASCII chart:
-
+.fi
+.PP
+Display an ASCII chart:
+.nf
     crash> ascii
- 
+
           0    1   2   3   4   5   6   7
         +-------------------------------
       0 | NUL DLE  SP  0   @   P   '   p
@@ -47,4 +41,5 @@ ascii value ...
       E |  SO  RS  .   >   N   ^   n   ~
       F |  SI  US  /   ?   O   -   o  DEL
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

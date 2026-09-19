@@ -4,30 +4,24 @@
 .SH NAME
 crash-repeat \- repeat a command
 .SH SYNOPSIS
-.in 0
-.nf
-repeat [-seconds] command
-.fi
-.in
+.B repeat
+[-seconds] command
 .SH DESCRIPTION
-.in 0
-.nf
-  This command repeats a command indefinitely, optionally delaying a given
-  number of seconds between each command execution.
-
-    -seconds   The number of seconds to delay between command executions.
-               This option must precede the command name to be executed.
- 
-  Command execution may be stopped with CTRL-C, or if scrolling is in effect,
-  by entering "q".  This command is meant for use on a live system; it is
-  hard to conceive of a reason to use it when debugging a crash dump.
-.fi
-.in
+.PP
+This command repeats a command indefinitely, optionally delaying a given
+number of seconds between each command execution.
+.TP
+.BI \-seconds
+The number of seconds to delay between command executions.
+This option must precede the command name to be executed.
+.PP
+Command execution may be stopped with CTRL-C, or if scrolling is in effect,
+by entering "q".  This command is meant for use on a live system; it is
+hard to conceive of a reason to use it when debugging a crash dump.
 .SH EXAMPLES
-.in 0
+.PP
+Display the value of jiffies once per second:
 .nf
-  Display the value of jiffies once per second:
-
     crash> repeat -1 p jiffies
     jiffies = $1 = 155551079
     jiffies = $2 = 155551180
@@ -49,4 +43,5 @@ repeat [-seconds] command
     jiffies = $18 = 155552796
     ...
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

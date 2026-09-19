@@ -4,57 +4,68 @@
 .SH NAME
 crash-dis \- disassemble
 .SH SYNOPSIS
-.in 0
-.nf
-dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
-.fi
-.in
+.B dis
+[-rfludxs][-b [num]] [address | symbol | (expression)] [count]
 .SH DESCRIPTION
-.in 0
+.PP
+This command disassembles source code instructions starting (or ending) at
+a text address that may be expressed by value, symbol or expression:
+.TP
+.BI \-r
+(reverse) displays all instructions from the start of the
+routine up to and including the designated address.
+.TP
+.BI \-f
+(forward) displays all instructions from the given address
+to the end of the routine.
+.TP
+.BI \-l
+displays source code line number data in addition to the
+disassembly output.
+.TP
+.BI \-u
+address is a user virtual address in the current context;
+otherwise the address is assumed to be a kernel virtual address.
+If this option is used, then -r and -l are ignored.
+.TP
+.BI \-x
+override default output format with hexadecimal format.
+.TP
+.BI \-d
+override default output format with decimal format.
+.TP
+.BI \-s
+displays the filename and line number of the source code that
+is associated with the specified text location, followed by a
+source code listing if it is available on the host machine.
+The line associated with the text location will be marked with
+an asterisk; depending upon gdb's internal "listsize" variable,
+several lines will precede the marked location. If a "count"
+argument is entered, it specifies the number of source code
+lines to be displayed after the marked location; otherwise
+the remaining source code of the containing function will be
+displayed.
+.TP
+.BI \-b \ [num]
+modify the pre-calculated number of encoded bytes to skip after
+a kernel BUG ("ud2a") instruction; with no argument, displays
+the current number of bytes being skipped. (x86 and x86_64 only)
+address  starting hexadecimal text address.
+symbol  symbol of starting text address.  On ppc64, the symbol
+preceded by '.' is used.
+.PP
+(expression)  expression evaluating to a starting text address.
 .nf
-  This command disassembles source code instructions starting (or ending) at
-  a text address that may be expressed by value, symbol or expression:
-
-            -r  (reverse) displays all instructions from the start of the 
-                routine up to and including the designated address.
-            -f  (forward) displays all instructions from the given address 
-                to the end of the routine.
-            -l  displays source code line number data in addition to the 
-                disassembly output.
-            -u  address is a user virtual address in the current context;
-                otherwise the address is assumed to be a kernel virtual address.
-                If this option is used, then -r and -l are ignored.
-            -x  override default output format with hexadecimal format.
-            -d  override default output format with decimal format.
-            -s  displays the filename and line number of the source code that
-                is associated with the specified text location, followed by a
-                source code listing if it is available on the host machine.
-                The line associated with the text location will be marked with
-                an asterisk; depending upon gdb's internal "listsize" variable,
-                several lines will precede the marked location. If a "count"
-                argument is entered, it specifies the number of source code
-                lines to be displayed after the marked location; otherwise
-                the remaining source code of the containing function will be
-                displayed.
-      -b [num]  modify the pre-calculated number of encoded bytes to skip after
-                a kernel BUG ("ud2a") instruction; with no argument, displays
-                the current number of bytes being skipped. (x86 and x86_64 only)
-       address  starting hexadecimal text address.
-        symbol  symbol of starting text address.  On ppc64, the symbol
-                preceded by '.' is used.
-  (expression)  expression evaluating to a starting text address.
          count  the number of instructions to be disassembled (default is 1).
                 If no count argument is entered, and the starting address
                 is entered as a text symbol, then the whole routine will be
                 disassembled.  The count argument is supported when used with
                 the -r and -f options.
 .fi
-.in
 .SH EXAMPLES
-.in 0
+.PP
+Disassemble the sys_signal() routine without, and then with, line numbers:
 .nf
-  Disassemble the sys_signal() routine without, and then with, line numbers:
-
     crash> dis sys_signal
     0xc0112c88 <sys_signal>:        push   %ebp
     0xc0112c89 <sys_signal+1>:      mov    %esp,%ebp
@@ -73,7 +84,7 @@ dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
     0xc0112caf <sys_signal+39>:     mov    0xffffffd8(%ebp),%eax
     0xc0112cb2 <sys_signal+42>:     leave
     0xc0112cb3 <sys_signal+43>:     ret
- 
+
     crash> dis -l sys_signal
     /usr/src/linux-2.2.5/kernel/signal.c: 1074
     0xc0112c88 <sys_signal>:        push   %ebp
@@ -98,10 +109,11 @@ dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
     /usr/src/linux-2.2.5/kernel/signal.c: 1084
     0xc0112cb2 <sys_signal+42>:     leave
     0xc0112cb3 <sys_signal+43>:     ret
- 
-  Given a return address expression of "do_no_page+65", find out the 
-  function that do_no_page() calls by using the reverse flag:
-
+.fi
+.PP
+Given a return address expression of "do_no_page+65", find out the
+function that do_no_page() calls by using the reverse flag:
+.nf
     crash> dis -r (do_no_page+65)
     0xc011ea68 <do_no_page>:        push   %ebp
     0xc011ea69 <do_no_page+1>:      mov    %esp,%ebp
@@ -130,9 +142,10 @@ dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
     0xc011eaa3 <do_no_page+59>:     push   %esi
     0xc011eaa4 <do_no_page+60>:     call   0xc011e9e4 <do_anonymous_page>
     0xc011eaa9 <do_no_page+65>:     jmp    0xc011eb47 <do_no_page+223>
-    
-  Disassemble 10 instructions starting at user virtual address 0x81ec624:
-
+.fi
+.PP
+Disassemble 10 instructions starting at user virtual address 0x81ec624:
+.nf
     crash> dis -u 81ec624 10
     0x81ec624:      push   %ebp
     0x81ec625:      mov    %esp,%ebp
@@ -144,9 +157,10 @@ dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
     0x81ec63f:      mov    0x14(%eax),%ecx
     0x81ec642:      and    $0x0,%ecx
     0x81ec645:      mov    %ecx,%eax
- 
-  Override the current decimal output radix format:
-
+.fi
+.PP
+Override the current decimal output radix format:
+.nf
     crash> dis sys_read 10 -x
     0xffffffff8001178f <sys_read>:  push   %r13
     0xffffffff80011791 <sys_read+0x2>:    mov    %rsi,%r13
@@ -158,9 +172,10 @@ dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
     0xffffffff800117a2 <sys_read+0x13>:   sub    $0x18,%rsp
     0xffffffff800117a6 <sys_read+0x17>:   lea    0x14(%rsp),%rsi
     0xffffffff800117ab <sys_read+0x1c>:   callq  0xffffffff8000b5b4 <fget_light>
- 
-  Disassemble from vfs_read+320 until the end of the function:
-
+.fi
+.PP
+Disassemble from vfs_read+320 until the end of the function:
+.nf
     crash> dis -f vfs_read+320
     0xffffffff8119d4e0 <vfs_read+320>:  cmpq   $0x0,0x20(%rax)
     0xffffffff8119d4e5 <vfs_read+325>:  jne    0xffffffff8119d3e8 <vfs_read+72>
@@ -176,21 +191,22 @@ dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
     0xffffffff8119d511 <vfs_read+369>:  mov    $0xfffffffffffffff2,%r12
     0xffffffff8119d518 <vfs_read+376>:  jmp    0xffffffff8119d4c3 <vfs_read+291>
     0xffffffff8119d51a <vfs_read+378>:  nopw   0x0(%rax,%rax,1)
- 
-  Display the source code listing of the mmput() function:
-
+.fi
+.PP
+Display the source code listing of the mmput() function:
+.nf
     crash> dis -s mmput
     FILE: kernel/fork.c
     LINE: 617
-    
-      612   
+
+      612
       613   /*
       614    * Decrement the use count and release all resources for an mm.
       615    */
       616   void mmput(struct mm_struct *mm)
     * 617   {
       618           might_sleep();
-      619   
+      619
       620           if (atomic_dec_and_test(&mm->mm_users)) {
       621                   uprobe_clear_state(mm);
       622                   exit_aio(mm);
@@ -208,11 +224,12 @@ dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
       634                   mmdrop(mm);
       635           }
       636   }
- 
-  The disassembly of dentry_kill() shows an indirect call to a function
-  whose address is contained within a register.  Display the source code
-  associated with the indirect function call:
-
+.fi
+.PP
+The disassembly of dentry_kill() shows an indirect call to a function
+whose address is contained within a register.  Display the source code
+associated with the indirect function call:
+.nf
     crash> dis dentry_kill
     ...
     0xffffffff811dcfb4 <dentry_kill+324>:	callq  *%rax
@@ -220,7 +237,7 @@ dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
     crash> dis -s 0xffffffff811dcfb4
     FILE: fs/dcache.c
     LINE: 276
-    
+
       271                   spin_unlock(&dentry->d_lock);
       272                   spin_unlock(&inode->i_lock);
       273                   if (!inode->i_nlink)
@@ -233,6 +250,6 @@ dis [-rfludxs][-b [num]] [address | symbol | (expression)] [count]
       280                   spin_unlock(&dentry->d_lock);
       281           }
       282   }
-    
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

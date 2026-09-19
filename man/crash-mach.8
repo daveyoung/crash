@@ -4,27 +4,29 @@
 .SH NAME
 crash-mach \- machine specific data
 .SH SYNOPSIS
-.in 0
-.nf
-mach [-m | -c -[xd] | -o]
-.fi
-.in
+.B mach
+[-m | -c -[xd] | -o]
 .SH DESCRIPTION
-.in 0
-.nf
-  This command displays data specific to a machine type.
-
-    -m  Display the physical memory map (x86, x86_64 and ia64 only).
-    -c  Display each cpu's cpuinfo structure (x86, x86_64 and ia64 only).
-        Display each cpu's x8664_pda structure (x86_64 only),
-        Display the hwrpb_struct, and each cpu's percpu_struct (alpha only).
-    -x  override default output format with hexadecimal format.
-    -d  override default output format with decimal format.
-    -o  Display the OPAL console log (ppc64 only).
-.fi
-.in
+.PP
+This command displays data specific to a machine type.
+.TP
+.BI \-m
+Display the physical memory map (x86, x86_64 and ia64 only).
+.TP
+.BI \-c
+Display each cpu's cpuinfo structure (x86, x86_64 and ia64 only).
+Display each cpu's x8664_pda structure (x86_64 only),
+Display the hwrpb_struct, and each cpu's percpu_struct (alpha only).
+.TP
+.BI \-x
+override default output format with hexadecimal format.
+.TP
+.BI \-d
+override default output format with decimal format.
+.TP
+.BI \-o
+Display the OPAL console log (ppc64 only).
 .SH EXAMPLES
-.in 0
 .nf
     crash> mach
            MACHINE TYPE: i686
@@ -37,11 +39,15 @@ mach [-m | -c -[xd] | -o]
     KERNEL VIRTUAL BASE: c0000000
     KERNEL VMALLOC BASE: e0800000
       KERNEL STACK SIZE: 8192
- 
-  Display the system physical memory map:
-
+.fi
+.PP
+Display the system physical memory map:
+.nf
     crash> mach -m
-          PHYSICAL ADDRESS RANGE         TYPE
+.fi
+.PP
+.B PHYSICAL ADDRESS RANGE         TYPE
+.nf
     0000000000000000 - 00000000000a0000  E820_RAM
     00000000000f0000 - 0000000000100000  E820_RESERVED
     0000000000100000 - 000000001ff75000  E820_RAM
@@ -51,9 +57,10 @@ mach [-m | -c -[xd] | -o]
     00000000fec00000 - 00000000fec90000  E820_RESERVED
     00000000fee00000 - 00000000fee10000  E820_RESERVED
     00000000ffb00000 - 0000000100000000  E820_RESERVED
- 
-  Display the OPAL console log:
-
+.fi
+.PP
+Display the OPAL console log:
+.nf
     crash> mach -o
     [   65.219056911,5] SkiBoot skiboot-5.4.0-218-ge0225cc-df9a248 starting...
     [   65.219065872,5] initial console log level: memory 7, driver 5
@@ -64,4 +71,5 @@ mach [-m | -c -[xd] | -o]
     [  494.026291523,7] BT: seq 0x25 netfn 0x0a cmd 0x48: Message sent to host
     [  494.027636927,7] BT: seq 0x25 netfn 0x0a cmd 0x48: IPMI MSG done
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

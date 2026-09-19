@@ -4,45 +4,47 @@
 .SH NAME
 crash-sys \- system data
 .SH SYNOPSIS
-.in 0
-.nf
-sys [-c [name|number]] [-t] [-i] config
-.fi
-.in
+.B sys
+[-c [name|number]] [-t] [-i] config
 .SH DESCRIPTION
-.in 0
+.PP
+This command displays system-specific data.  If no arguments are entered,
+the same system data shown during crash invocation is shown.
+.TP
+.BI \-c \ [name|number]
+If no name or number argument is entered, dump all
+sys_call_table entries.  If a name string is entered,
+search the table for all entries containing the string.
+If a number is entered, the table entry associated with
+that number is displayed.  If the current output radix
+has been set to 16, the system call numbers will be
+displayed in hexadecimal.
 .nf
-  This command displays system-specific data.  If no arguments are entered,
-  the same system data shown during crash invocation is shown.
-
-    -c [name|number]  If no name or number argument is entered, dump all
-                      sys_call_table entries.  If a name string is entered,
-                      search the table for all entries containing the string.
-                      If a number is entered, the table entry associated with
-                      that number is displayed.  If the current output radix
-                      has been set to 16, the system call numbers will be 
-                      displayed in hexadecimal.
     config            If the kernel was configured with CONFIG_IKCONFIG, then
                       dump the in-kernel configuration data.
-    -t                Display kernel taint information.  If the "tainted_mask"
-                      symbol exists, show its hexadecimal value and translate
-                      each bit set to the symbolic letter of the taint type.
-                      On older kernels with the "tainted" symbol, only its
-                      hexadecimal value is shown.  The relevant kernel sources
-                      should be consulted for the meaning of the letter(s) or
-                      hexadecimal bit value(s).
-    -panic            Panic a live system.  Requires write permission to
-                      /dev/mem.  Results in the crash context causing an
-                      "Attempted to kill the idle task!" panic.  (The dump
-                      will indicate that the crash context has a PID of 0).
-    -i                Dump the DMI string data if available in the kernel.
 .fi
-.in
+.TP
+.BI \-t
+Display kernel taint information.  If the "tainted_mask"
+symbol exists, show its hexadecimal value and translate
+each bit set to the symbolic letter of the taint type.
+On older kernels with the "tainted" symbol, only its
+hexadecimal value is shown.  The relevant kernel sources
+should be consulted for the meaning of the letter(s) or
+hexadecimal bit value(s).
+.TP
+.BI \-panic
+Panic a live system.  Requires write permission to
+/dev/mem.  Results in the crash context causing an
+"Attempted to kill the idle task!" panic.  (The dump
+will indicate that the crash context has a PID of 0).
+.TP
+.BI \-i
+Dump the DMI string data if available in the kernel.
 .SH EXAMPLES
-.in 0
+.PP
+Display essential system information:
 .nf
-  Display essential system information:
-
     crash> sys
           KERNEL: vmlinux.4
         DUMPFILE: lcore.cr.4
@@ -56,9 +58,10 @@ sys [-c [name|number]] [-t] [-i] config
          VERSION: #24 SMP Mon Oct 11 17:41:40 CDT 1999
          MACHINE: i686  (500 MHz)
           MEMORY: 1 GB
-
-  Dump the system configuration data (if CONFIG_IKCONFIG):
-
+.fi
+.PP
+Dump the system configuration data (if CONFIG_IKCONFIG):
+.nf
     crash> sys config
     #
     # Automatically generated make config: don't edit
@@ -79,17 +82,22 @@ sys [-c [name|number]] [-t] [-i] config
     CONFIG_ARCH_MAY_HAVE_PC_FDC=y
     CONFIG_DMI=y
     ...
-
-  Display the kernel taint information, in this case where both the
-  TAINT_WARN and TAINT_PROPRIETARY_MODULE bits have been set:
-
+.fi
+.PP
+Display the kernel taint information, in this case where both the
+TAINT_WARN and TAINT_PROPRIETARY_MODULE bits have been set:
+.nf
     crash> sys -t
     TAINTED_MASK: 201  PW
-
-  Dump the system call table:
-
+.fi
+.PP
+Dump the system call table:
+.nf
     crash> sys -c
-    NUM  SYSTEM CALL                FILE AND LINE NUMBER
+.fi
+.PP
+.B NUM  SYSTEM CALL                FILE AND LINE NUMBER
+.nf
       0  sys_ni_syscall             ../kernel/sys.c: 48
       1  sys_exit                   ../kernel/exit.c: 404
       2  sys_fork                   ../arch/i386/kernel/process.c: 771
@@ -103,18 +111,23 @@ sys [-c [name|number]] [-t] [-i] config
      10  sys_unlink                 ../fs/namei.c: 1074
      11  sys_execve                 ../arch/i386/kernel/process.c: 806
     ...
-
-  Find the system call number of the select system call:
-
+.fi
+.PP
+Find the system call number of the select system call:
+.nf
     crash> sys -c select
-    NUM  SYSTEM CALL                FILE AND LINE NUMBER
+.fi
+.PP
+.B NUM  SYSTEM CALL                FILE AND LINE NUMBER
+.nf
      65  sys_select                 ../fs/select.c: 259
- 
+
     If the current output radix has been set to 16, the system call numbers
     will be displayed in hexadecimal.
-
-  Dump the DMI string data:
-
+.fi
+.PP
+Dump the DMI string data:
+.nf
     crash> sys -i
             DMI_BIOS_VENDOR: LENOVO
            DMI_BIOS_VERSION: G4ET37WW (1.12 )
@@ -135,4 +148,5 @@ sys [-c [name|number]] [-t] [-i] config
          DMI_CHASSIS_SERIAL: R9R91HZ
       DMI_CHASSIS_ASSET_TAG: RH0004111
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

@@ -4,50 +4,57 @@
 .SH NAME
 crash-log \- dump system message buffer
 .SH SYNOPSIS
-.in 0
-.nf
-log [-TtdmascR]
-.fi
-.in
+.B log
+[-TtdmascR]
 .SH DESCRIPTION
-.in 0
-.nf
-  This command dumps the kernel log_buf contents in chronological order.  The
-  command supports the older log_buf formats, which may or may not contain a
-  timestamp inserted prior to each message, as well as the newer variable-length
-  record format, where the timestamp is contained in each log entry's header.
-  
-    -T  Display the message text with human readable timestamp.
-        (Be aware that the timestamp could be inaccurate!  The timestamp is
-         from local_clock(), which is different from the elapsed wall time.)
-    -t  Display the message text without the timestamp; only applicable to the
-        variable-length record format.
-    -d  Display the dictionary of key/value pair properties that are optionally
-        appended to a message by the kernel's dev_printk() function; only
-        applicable to the variable-length record format.
-    -m  Display the message log level in brackets preceding each message.  For
-        the variable-length record format, the level will be displayed in 
-        hexadecimal.  In older kernels, by default, the facility/flag bits
-        will be stripped to only show the level, but if needed, can still be
-        shown with 'set debug 1'.
-    -a  Dump the audit logs remaining in kernel audit buffers that have not
-        been copied out to the user-space audit daemon.
-    -s  Dump the printk logs remaining in kernel safe per-CPU buffers that
-        have not been flushed out to log_buf.
-    -c  Display the caller id field that identifies either the thread id or
-        the CPU id (if in CPU context) that called printk(), if available.
-        Generally available on Linux 5.1 to 5.9 kernels configured with
-        CONFIG_PRINTK_CALLER or Linux 5.10 and later kernels.
-    -R  Display the message text with human readable Rust symbol name if any,
-        otherwise still print the original message text.
- 
-.fi
-.in
+.PP
+This command dumps the kernel log_buf contents in chronological order.  The
+command supports the older log_buf formats, which may or may not contain a
+timestamp inserted prior to each message, as well as the newer variable-length
+record format, where the timestamp is contained in each log entry's header.
+.TP
+.BI \-T
+Display the message text with human readable timestamp.
+(Be aware that the timestamp could be inaccurate!  The timestamp is
+from local_clock(), which is different from the elapsed wall time.)
+.TP
+.BI \-t
+Display the message text without the timestamp; only applicable to the
+variable-length record format.
+.TP
+.BI \-d
+Display the dictionary of key/value pair properties that are optionally
+appended to a message by the kernel's dev_printk() function; only
+applicable to the variable-length record format.
+.TP
+.BI \-m
+Display the message log level in brackets preceding each message.  For
+the variable-length record format, the level will be displayed in
+hexadecimal.  In older kernels, by default, the facility/flag bits
+will be stripped to only show the level, but if needed, can still be
+shown with 'set debug 1'.
+.TP
+.BI \-a
+Dump the audit logs remaining in kernel audit buffers that have not
+been copied out to the user-space audit daemon.
+.TP
+.BI \-s
+Dump the printk logs remaining in kernel safe per-CPU buffers that
+have not been flushed out to log_buf.
+.TP
+.BI \-c
+Display the caller id field that identifies either the thread id or
+the CPU id (if in CPU context) that called printk(), if available.
+Generally available on Linux 5.1 to 5.9 kernels configured with
+CONFIG_PRINTK_CALLER or Linux 5.10 and later kernels.
+.TP
+.BI \-R
+Display the message text with human readable Rust symbol name if any,
+otherwise still print the original message text.
 .SH EXAMPLES
-.in 0
+.PP
+Dump the kernel message buffer:
 .nf
-  Dump the kernel message buffer:
-
     crash> log
     Linux version 2.2.5-15smp (root@mclinux1) (gcc version egcs-2.91.66 19990
     314/Linux (egcs-1.1.2 release)) #1 SMP Thu Aug 26 11:04:37 EDT 1999
@@ -70,9 +77,10 @@ log [-TtdmascR]
     Installing knfsd (copyright (C) 1996 okir@monad.swb.de).
     nfsd_init: initialized fhcache, entries=256
     ...
- 
-  Do the same thing, but also show the log level preceding each message:
-
+.fi
+.PP
+Do the same thing, but also show the log level preceding each message:
+.nf
     crash> log -m
     <4>Linux version 2.2.5-15smp (root@mclinux1) (gcc version egcs-2.91.66 19990
     314/Linux (egcs-1.1.2 release)) #1 SMP Thu Aug 26 11:04:37 EDT 1999
@@ -94,11 +102,12 @@ log [-TtdmascR]
     <6>  Enabling bus-master transmits and whole-frame receives.
     <6>Installing knfsd (copyright (C) 1996 okir@monad.swb.de).
     <7>nfsd_init: initialized fhcache, entries=256
-    ... 
- 
-  On a system with the variable-length record format, and whose log_buf has been
-  filled and wrapped around, display the log with timestamp data:
-
+    ...
+.fi
+.PP
+On a system with the variable-length record format, and whose log_buf has been
+filled and wrapped around, display the log with timestamp data:
+.nf
     crash> log
     [    0.467730] pci 0000:ff:02.0: [8086:2c10] type 00 class 0x060000
     [    0.467749] pci 0000:ff:02.1: [8086:2c11] type 00 class 0x060000
@@ -107,9 +116,10 @@ log [-TtdmascR]
     [    0.467809] pci 0000:ff:03.0: [8086:2c18] type 00 class 0x060000
     [    0.467828] pci 0000:ff:03.1: [8086:2c19] type 00 class 0x060000
     ...
- 
-  Display the same message text as above, without the timestamp data:
-
+.fi
+.PP
+Display the same message text as above, without the timestamp data:
+.nf
     crash> log -t
     pci 0000:ff:02.0: [8086:2c10] type 00 class 0x060000
     pci 0000:ff:02.1: [8086:2c11] type 00 class 0x060000
@@ -118,9 +128,10 @@ log [-TtdmascR]
     pci 0000:ff:03.0: [8086:2c18] type 00 class 0x060000
     pci 0000:ff:03.1: [8086:2c19] type 00 class 0x060000
     ...
- 
-  Display the same message text as above, with appended dictionary data:
-
+.fi
+.PP
+Display the same message text as above, with appended dictionary data:
+.nf
     crash> log -td
     pci 0000:ff:02.0: [8086:2c10] type 00 class 0x060000
     SUBSYSTEM=pci
@@ -141,39 +152,41 @@ log [-TtdmascR]
     SUBSYSTEM=pci
     DEVICE=+pci:0000:ff:03.1
     ...
- 
-  Dump the kernel audit logs:
-
+.fi
+.PP
+Dump the kernel audit logs:
+.nf
     crash> log -a
     type=1320 audit(1489384479.809:4342):
-    type=1300 audit(1489384479.809:4343): arch=c000003e syscall=0 success=yes 
-    exit=0 a0=4 a1=7f84154a2000 a2=400 a3=22 items=0 ppid=2560 pid=2591 auid=0 
-    uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=ttyS0 ses=1 
-    comm="pidof" exe="/usr/sbin/killall5" 
+    type=1300 audit(1489384479.809:4343): arch=c000003e syscall=0 success=yes
+    exit=0 a0=4 a1=7f84154a2000 a2=400 a3=22 items=0 ppid=2560 pid=2591 auid=0
+    uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=ttyS0 ses=1
+    comm="pidof" exe="/usr/sbin/killall5"
     subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=(null)
     type=1320 audit(1489384479.809:4343):
-    type=1300 audit(1489384479.809:4344): arch=c000003e syscall=3 success=yes 
-    exit=0 a0=4 a1=1 a2=8 a3=0 items=0 ppid=2560 pid=2591 auid=0 uid=0 gid=0 
-    euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=ttyS0 ses=1 comm="pidof" 
-    exe="/usr/sbin/killall5" 
+    type=1300 audit(1489384479.809:4344): arch=c000003e syscall=3 success=yes
+    exit=0 a0=4 a1=1 a2=8 a3=0 items=0 ppid=2560 pid=2591 auid=0 uid=0 gid=0
+    euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=ttyS0 ses=1 comm="pidof"
+    exe="/usr/sbin/killall5"
     subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=(null)
     type=1320 audit(1489384479.809:4344):
-    type=1300 audit(1489384479.809:4345): arch=c000003e syscall=11 
-    success=yes exit=0 a0=7f84154a2000 a1=1000 a2=0 a3=0 items=0 ppid=2560 
-    pid=2591 auid=0 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 
-    tty=ttyS0 ses=1 comm="pidof" exe="/usr/sbin/killall5" 
+    type=1300 audit(1489384479.809:4345): arch=c000003e syscall=11
+    success=yes exit=0 a0=7f84154a2000 a1=1000 a2=0 a3=0 items=0 ppid=2560
+    pid=2591 auid=0 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0
+    tty=ttyS0 ses=1 comm="pidof" exe="/usr/sbin/killall5"
     subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=(null)
     type=1320 audit(1489384479.809:4345):
-    type=1300 audit(1489384479.809:4346): arch=c000003e syscall=2 success=yes 
+    type=1300 audit(1489384479.809:4346): arch=c000003e syscall=2 success=yes
     exit=4 a0=7ffcfd20f5a0 a1=0 a2=1b6 a3=24 items=1 ppid=2560 pid=2591 auid=0
-    uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=ttyS0 ses=1 
-    comm="pidof" exe="/usr/sbin/killall5" 
+    uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=ttyS0 ses=1
+    comm="pidof" exe="/usr/sbin/killall5"
     subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=(null)
     type=1307 audit(1489384479.809:4346):  cwd="/proc"
     ...
- 
-  Display the message text with human readable timestamp:
-
+.fi
+.PP
+Display the message text with human readable timestamp:
+.nf
     crash> log -T
     [Sat Apr  4 07:41:09 2020] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
     [Sat Apr  4 07:41:09 2020] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
@@ -198,18 +211,20 @@ log [-TtdmascR]
     [Sat Apr  4 07:41:09 2020] MTRR default type: uncachable
     [Sat Apr  4 07:41:09 2020] MTRR variable ranges disabled:
     ...
- 
-  On a system which has printk_safe_seq_buf buffer,
-  display its unflushed log with buffer name:
-
+.fi
+.PP
+On a system which has printk_safe_seq_buf buffer,
+display its unflushed log with buffer name:
+.nf
     crash> log
     ...
     [nmi_print_seq] Uhhuh. NMI received for unknown reason 30 on CPU 0.
     [nmi_print_seq] Do you have a strange power saving mode enabled?
     [nmi_print_seq] Dazed and confused, but trying to continue
- 
-  Dump the printk safe buffers:
-
+.fi
+.PP
+Dump the printk safe buffers:
+.nf
     crash> log -s
     PRINTK_SAFE_SEQ_BUF: nmi_print_seq
     CPU: 0  ADDR: ffff8ca4fbc19ce0 LEN: 150  MESSAGE_LOST: 0
@@ -221,21 +236,23 @@ log [-TtdmascR]
     CPU: 0  ADDR: ffff8ca4fbc1ad00 LEN: 0  MESSAGE_LOST: 0
       (empty)
     ...
- 
-  Display the caller id that identifies the thread id of the task (begins
-  with 'T') or the processor id (begins with 'C' for in CPU context) that
-  called printk(), if available.
-
+.fi
+.PP
+Display the caller id that identifies the thread id of the task (begins
+with 'T') or the processor id (begins with 'C' for in CPU context) that
+called printk(), if available.
+.nf
     crash> log -c
     ...
     [    0.014179] [     T1] Secure boot disabled
     [    0.014179] [    T29] RAMDISK: [mem 0x3cf4f000-0x437bbfff]
     [    0.198789] [     C0] DMAR: DRHD: handling fault status reg 3
     ...
- 
-  Display the message text with human readable Rust symbol name if any,
-  otherwise still print the original message text.
-
+.fi
+.PP
+Display the message text with human readable Rust symbol name if any,
+otherwise still print the original message text.
+.nf
     crash> log -R
     ...
     [ 2174.289360] Tainted: [S]=CPU_OUT_OF_SPEC, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
@@ -254,4 +271,5 @@ log [-TtdmascR]
     [ 2174.362456]  ? __pfx_init_module+0x10/0x10 [rust_panic]
     ...
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

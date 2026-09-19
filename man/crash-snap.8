@@ -5,18 +5,15 @@
 .SH NAME
 crash-snap \- take a memory snapshot
 .SH SYNOPSIS
-.in 0
-.nf
-snap [-n] dumpfile
-.fi
-.in
+.B snap
+[-n] dumpfile
 .SH DESCRIPTION
-.in 0
-.nf
-  This command takes a snapshot of physical memory and creates an ELF vmcore.
-  The default vmcore is a kdump-style dumpfile.  Supported on x86, x86_64,
-  ia64 and ppc64 architectures only.
- 
-    -n  create a netdump-style vmcore (n/a on x86_64).
-.fi
-.in
+.PP
+This command takes a snapshot of physical memory and creates an ELF vmcore.
+The default vmcore is a kdump-style dumpfile.  Supported on x86, x86_64,
+ia64 and ppc64 architectures only.
+.TP
+.BI \-n
+create a netdump-style vmcore (n/a on x86_64).
+.SH SEE ALSO
+.BR crash (8)

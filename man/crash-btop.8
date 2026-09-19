@@ -4,21 +4,15 @@
 .SH NAME
 crash-btop \- bytes to page
 .SH SYNOPSIS
-.in 0
-.nf
-btop address ...
-.fi
-.in
+.B btop
+address ...
 .SH DESCRIPTION
-.in 0
-.nf
-  This command translates a hexadecimal address to its page number.
-.fi
-.in
+.PP
+This command translates a hexadecimal address to its page number.
 .SH EXAMPLES
-.in 0
 .nf
     crash> btop 512a000
     512a000: 512a
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

@@ -4,19 +4,14 @@
 .SH NAME
 crash-foreach \- display command data for multiple tasks in the system
 .SH SYNOPSIS
-.in 0
-.nf
-foreach [[pid | taskp | name | state | [kernel | user | gleader]] ...]
-          command [flag] [argument]
-.fi
-.in
+.B foreach
+[[pid | taskp | name | state | [kernel | user | gleader]] ...] command [flag] [argument]
 .SH DESCRIPTION
-.in 0
+.PP
+This command allows for an examination of various kernel data associated
+with any, or all, tasks in the system, without having to set the context
+to each targeted task.
 .nf
-  This command allows for an examination of various kernel data associated
-  with any, or all, tasks in the system, without having to set the context
-  to each targeted task.
-
       pid  perform the command(s) on this PID.
     taskp  perform the command(s) on task referenced by this hexadecimal
            task_struct pointer.
@@ -27,43 +22,53 @@ foreach [[pid | taskp | name | state | [kernel | user | gleader]] ...]
            must be a POSIX extended regular expression that will be used
            to match task names.
      user  perform the command(s) on all user (non-kernel) threads.
-  gleader  perform the command(s) on all user (non-kernel) thread group leaders.
+.fi
+.PP
+gleader  perform the command(s) on all user (non-kernel) thread group leaders.
+.nf
    kernel  perform the command(s) on all kernel threads.
    active  perform the command(s) on the active thread on each CPU.
     state  perform the command(s) on all tasks in the specified state, which
            may be one of: RU, IN, UN, ST, ZO, TR, SW, DE, WA, PA, ID or NE.
-
-  If none of the task-identifying arguments above are entered, the command
-  will be performed on all tasks.
-
-  command  select one or more of the following commands to be run on the tasks
+.fi
+.PP
+If none of the task-identifying arguments above are entered, the command
+will be performed on all tasks.
+.PP
+command  select one or more of the following commands to be run on the tasks
+.nf
            selected, or on all tasks:
 
               bt  run the "bt" command  (optional flags: -r -t -l -e -R -f -F
-                  -o -s -x -d)
+.fi
+.TP
+.BI \-o \ \-s \ \-x \ \-d)
+.nf
               vm  run the "vm" command  (optional flags: -p -v -m -R -d -x)
             task  run the "task" command  (optional flags: -R -d -x)
            files  run the "files" command  (optional flag: -c -R)
              net  run the "net" command  (optional flags: -s -S -R -d -x)
              set  run the "set" command
               ps  run the "ps" command  (optional flags: -G -s -p -c -t -l -a
-                  -g -r -y)
+.fi
+.TP
+.BI \-g \ \-r \ \-y)
+.nf
              sig  run the "sig" command (optional flag: -g)
             vtop  run the "vtop" command  (optional flags: -c -u -k)
 
      flag  Pass this optional flag to the command selected.
- argument  Pass this argument to the command selected.
- 
-  A header containing the PID, task address, cpu and command name will be
-  pre-pended before the command output for each selected task.  Consult the
-  help page of each of the command types above for details.
 .fi
-.in
+.PP
+argument  Pass this argument to the command selected.
+.PP
+A header containing the PID, task address, cpu and command name will be
+pre-pended before the command output for each selected task.  Consult the
+help page of each of the command types above for details.
 .SH EXAMPLES
-.in 0
+.PP
+Display the stack traces for all tasks:
 .nf
-  Display the stack traces for all tasks:
-
     crash> foreach bt
     PID: 4752   TASK: c7680000  CPU: 1   COMMAND: "xterm"
      #0 [c7681edc] schedule at c01135f6
@@ -75,11 +80,11 @@ foreach [[pid | taskp | name | state | [kernel | user | gleader]] ...]
      #3 [c7681fbc] sys_select at c0132dad
         (5, 8070300, 8070380, 0, 0)
      #4 [bffffb0c] system_call at c0109944
-        EAX: 0000008e  EBX: 00000005  ECX: 08070300  EDX: 08070380 
-        DS:  002b      ESI: 00000000  ES:  002b      EDI: 00000000 
-        SS:  002b      ESP: bffffadc  EBP: bffffb0c 
-        CS:  0023      EIP: 402259ee  ERR: 0000008e  EFLAGS: 00000246 
-    
+        EAX: 0000008e  EBX: 00000005  ECX: 08070300  EDX: 08070380
+        DS:  002b      ESI: 00000000  ES:  002b      EDI: 00000000
+        SS:  002b      ESP: bffffadc  EBP: bffffb0c
+        CS:  0023      EIP: 402259ee  ERR: 0000008e  EFLAGS: 00000246
+
     PID: 557    TASK: c5600000  CPU: 0   COMMAND: "nfsd"
      #0 [c5601f38] schedule at c01135f6
         (void)
@@ -91,35 +96,39 @@ foreach [[pid | taskp | name | state | [kernel | user | gleader]] ...]
         (c5602800, c5602800, c0096f40, 6c6e0002, 50)
      #4 [c65c9f24] kernel_thread at c010834f
         (0, 0, ext2_file_inode_operations)
-    
+
     PID: 824    TASK: c7c84000  CPU: 0   COMMAND: "mingetty"
     ...
-
-  Display the task_struct structure for each "bash" command:
-
+.fi
+.PP
+Display the task_struct structure for each "bash" command:
+.nf
     crash> foreach bash task
     ...
-
-  Display the open files for all tasks:
-
+.fi
+.PP
+Display the open files for all tasks:
+.nf
     crash> foreach files
     ...
-
-  Display the state of tasks whose name contains a match to "event.*":
-
+.fi
+.PP
+Display the state of tasks whose name contains a match to "event.*":
+.nf
     crash> foreach 'event.*' task -R state
     PID: 99     TASK: ffff8804750d5500  CPU: 0   COMMAND: "events/0"
       state = 1,
-    
+
     PID: 100    TASK: ffff8804750d4ac0  CPU: 1   COMMAND: "events/1"
       state = 1,
-    
+
     PID: 101    TASK: ffff8804750d4080  CPU: 2   COMMAND: "events/2"
       state = 1,
     ...
-
-  Display the stack traces for all blocked (TASK_UNINTERRUPTIBLE) tasks:
-
+.fi
+.PP
+Display the stack traces for all blocked (TASK_UNINTERRUPTIBLE) tasks:
+.nf
     crash> foreach UN bt
     PID: 428    TASK: ffff880036b6c560  CPU: 1   COMMAND: "jbd2/dm-1-8"
      #0 [ffff880035779a70] __schedule at ffffffff815df272
@@ -135,6 +144,6 @@ foreach [[pid | taskp | name | state | [kernel | user | gleader]] ...]
     #10 [ffff880035779ee8] kthread at ffffffff8108fb9c
     #11 [ffff880035779f48] kernel_thread_helper at ffffffff815ebaf4
     ...
-
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

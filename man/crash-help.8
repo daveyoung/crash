@@ -4,49 +4,71 @@
 .SH NAME
 crash-help \- get help
 .SH SYNOPSIS
-.in 0
-.nf
-help [command | all] [-<option>]
-.fi
-.in
+.B help
+[command | all] [-<option>]
 .SH DESCRIPTION
-.in 0
-.nf
-  When entered with no argument, a list of all currently available crash
-  commands is listed.  If a name of a crash command is entered, a man-like
-  page for the command is displayed.  If "all" is entered, help pages
-  for all commands will be displayed.  If neither of the above is entered,
-  the argument string will be passed on to the gdb help command.
- 
-  A number of internal debug, statistical, and other dumpfile related
-  data is available with the following options:
- 
-    -a - alias data
-    -b - shared buffer data
-    -B - build data
-    -c - numargs cache
-    -d - device table
-    -D - dumpfile contents/statistics
-    -e - extension table data
-    -f - filesys table
-    -g - gdb data
-    -h - hash_table data
-    -H - hash_table data (verbose)
-    -k - kernel_table
-    -K - kernel_table (verbose)
-    -L - LKCD page cache environment
-    -M <num> machine specific
-    -m - machdep_table
-    -N - net_table
-    -n - dumpfile contents/statistics
-    -o - offset_table and size_table
-    -p - program_context
-    -r - dump registers from dumpfile header
-    -s - symbol table data
-    -t - task_table
-    -T - task_table plus context_array
-    -v - vm_table
-    -V - vm_table (verbose)
-    -z - help options
-.fi
-.in
+.PP
+When entered with no argument, a list of all currently available crash
+commands is listed.  If a name of a crash command is entered, a man-like
+page for the command is displayed.  If "all" is entered, help pages
+for all commands will be displayed.  If neither of the above is entered,
+the argument string will be passed on to the gdb help command.
+.PP
+A number of internal debug, statistical, and other dumpfile related
+data is available with the following options:
+.TP
+.BI \-a \ \- \ alias \ data
+.TP
+.BI \-b \ \- \ shared \ buffer \ data
+.TP
+.BI \-B \ \- \ build \ data
+.TP
+.BI \-c \ \- \ numargs \ cache
+.TP
+.BI \-d \ \- \ device \ table
+.TP
+.BI \-D \ \- \ dumpfile \ contents/statistics
+.TP
+.BI \-e \ \- \ extension \ table \ data
+.TP
+.BI \-f \ \- \ filesys \ table
+.TP
+.BI \-g \ \- \ gdb \ data
+.TP
+.BI \-h \ \- \ hash_table \ data
+.TP
+.BI \-H \ \- \ hash_table \ data \ (verbose)
+.TP
+.BI \-k \ \- \ kernel_table
+.TP
+.BI \-K \ \- \ kernel_table \ (verbose)
+.TP
+.BI \-L \ \- \ LKCD \ page \ cache \ environment
+.TP
+.BI \-M \ <num> \ machine \ specific
+.TP
+.BI \-m \ \- \ machdep_table
+.TP
+.BI \-N \ \- \ net_table
+.TP
+.BI \-n \ \- \ dumpfile \ contents/statistics
+.TP
+.BI \-o \ \- \ offset_table \ and \ size_table
+.TP
+.BI \-p \ \- \ program_context
+.TP
+.BI \-r \ \- \ dump \ registers \ from \ dumpfile \ header
+.TP
+.BI \-s \ \- \ symbol \ table \ data
+.TP
+.BI \-t \ \- \ task_table
+.TP
+.BI \-T \ \- \ task_table \ plus \ context_array
+.TP
+.BI \-v \ \- \ vm_table
+.TP
+.BI \-V \ \- \ vm_table \ (verbose)
+.TP
+.BI \-z \ \- \ help \ options
+.SH SEE ALSO
+.BR crash (8)

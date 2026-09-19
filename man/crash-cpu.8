@@ -4,30 +4,25 @@
 .SH NAME
 crash-cpu \- set context to the active task on a cpu
 .SH SYNOPSIS
-.in 0
-.nf
-cpu [cpu]
-.fi
-.in
+.B cpu
+[cpu]
 .SH DESCRIPTION
-.in 0
+.PP
+This command sets the current context to the active task on a cpu.  If no
+argument is given, the current context is displayed.
 .nf
-  This command sets the current context to the active task on a cpu.  If no
-  argument is given, the current context is displayed.
-
     cpu   a valid cpu number
-
-  This command is not allowable on live systems.
 .fi
-.in
+.PP
+This command is not allowable on live systems.
 .SH EXAMPLES
-.in 0
 .nf
     crash> cpu 1
          PID: 286
      COMMAND: "in.rlogind"
-        TASK: c0b3a000 
-         CPU: 1 
+        TASK: c0b3a000
+         CPU: 1
        STATE: TASK_RUNNING (ACTIVE)
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

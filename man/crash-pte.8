@@ -4,28 +4,28 @@
 .SH NAME
 crash-pte \- translate a page table entry
 .SH SYNOPSIS
-.in 0
-.nf
-pte contents ...
-.fi
-.in
+.B pte
+contents ...
 .SH DESCRIPTION
-.in 0
-.nf
-  This command translates the hexadecimal contents of a PTE into its physical
-  page address and page bit settings.  If the PTE references a swap location,
-  the swap device and offset are displayed.
-.fi
-.in
+.PP
+This command translates the hexadecimal contents of a PTE into its physical
+page address and page bit settings.  If the PTE references a swap location,
+the swap device and offset are displayed.
 .SH EXAMPLES
-.in 0
 .nf
     crash> pte d8e067
-     PTE    PHYSICAL  FLAGS
+.fi
+.PP
+.B PTE    PHYSICAL  FLAGS
+.nf
     d8e067   d8e000   (PRESENT|RW|USER|ACCESSED|DIRTY)
- 
+
     crash> pte 13f600
-     PTE      SWAP     OFFSET
+.fi
+.PP
+.B PTE      SWAP     OFFSET
+.nf
     13f600  /dev/hda2   5104
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

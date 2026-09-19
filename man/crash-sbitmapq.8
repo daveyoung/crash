@@ -4,48 +4,50 @@
 .SH NAME
 crash-sbitmapq \- sbitmap_queue struct contents
 .SH SYNOPSIS
-.in 0
-.nf
-sbitmapq [-s struct[.member[,member]] -a address [-p] [-v]] -[x|d] address
-.fi
-.in
+.B sbitmapq
+[-s struct[.member[,member]] -a address [-p] [-v]] -[x|d] address
 .SH DESCRIPTION
-.in 0
-.nf
-  The command dumps the contents of the sbitmap_queue structure and
-  the used bits in the bitmap. Also, it shows the dump of a structure
-  array associated with the sbitmap_queue.
-
-  The arguments are as follows:
-
-   -s struct  name of a C-code structure, that is stored in an array
-              associated with sbitmap_queue structure. Use the
-              "struct.member" format in order to display a particular
-              member of the structure. -s option requires -a option
-  -a address  address of a structure array associated with sbitmap_queue
-              structure. The set bits in sbitmap are used for the index
-              in an associated array.
-          -p  associated with sbitmap_queue array contains the points of
-              structure.
-          -x  override default output format with hexadecimal format.
-          -d  override default output format with decimal format.
-          -v  By default, the sbitmap command shows only a used sbitmap
-              index and a structure address in the associated array.
-              This flag says to print a formatted display of the
-              contents of a structure in an associated array. -v option
-              requires of -s.
-
-.fi
-.in
+.PP
+The command dumps the contents of the sbitmap_queue structure and
+the used bits in the bitmap. Also, it shows the dump of a structure
+array associated with the sbitmap_queue.
+.PP
+The arguments are as follows:
+.TP
+.BI \-s \ struct
+name of a C-code structure, that is stored in an array
+associated with sbitmap_queue structure. Use the
+"struct.member" format in order to display a particular
+member of the structure. -s option requires -a option
+.TP
+.BI \-a \ address
+address of a structure array associated with sbitmap_queue
+structure. The set bits in sbitmap are used for the index
+in an associated array.
+.TP
+.BI \-p
+associated with sbitmap_queue array contains the points of
+structure.
+.TP
+.BI \-x
+override default output format with hexadecimal format.
+.TP
+.BI \-d
+override default output format with decimal format.
+.TP
+.BI \-v
+By default, the sbitmap command shows only a used sbitmap
+index and a structure address in the associated array.
+This flag says to print a formatted display of the
+contents of a structure in an associated array. -v option
+requires of -s.
 .SH EXAMPLES
-.in 0
+.PP
+All examples are shown on the base of Linux Target system with iSCSI
+transport.
+.PP
+Display the common sbitmap information for target session:
 .nf
-
-  All examples are shown on the base of Linux Target system with iSCSI
-  transport.
-
-  Display the common sbitmap information for target session:
-
     crash> struct -oh se_session 0xc0000000e118c760 | grep sbitmap_queue
       [c0000000e118c808] struct sbitmap_queue sess_tag_pool;
     crash>
@@ -74,19 +76,21 @@ sbitmapq [-s struct[.member[,member]] -a address [-p] [-v]] -[x|d] address
 
     00000000: 0000 0000 0000 0000 0030 0000 0000 0000
     00000010: 00
-
-  Display the addresses of structure are associated with
-  sbitmap_queue (for iscsi it is 'iscsi_cmd' structure):
-
+.fi
+.PP
+Display the addresses of structure are associated with
+sbitmap_queue (for iscsi it is 'iscsi_cmd' structure):
+.nf
     crash> struct se_session 0xc0000000e118c760 | grep sess_cmd_map
       sess_cmd_map = 0xc0000000671c0000,
     crash>
     crash> sbitmapq -s iscsi_cmd -a 0xc0000000671c0000 c0000000e118c808
     76: 0xc0000000671d5600
     77: 0xc0000000671d5a80
-
-  Dump of formatted content of structures:
-
+.fi
+.PP
+Dump of formatted content of structures:
+.nf
     crash> sbitmapq -s iscsi_cmd -a 0xc0000000671c0000 -v c0000000e118c808
     76 (0xc0000000671d5600):
     struct iscsi_cmd {
@@ -115,4 +119,5 @@ sbitmapq [-s struct[.member[,member]] -a address [-p] [-v]] -[x|d] address
       sense_reason = 0
     }
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

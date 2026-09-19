@@ -161,7 +161,7 @@ EXTENSION_SOURCE_FILES=${EXTENSIONS}/Makefile ${EXTENSIONS}/echo.c ${EXTENSIONS}
 	${EXTENSIONS}/eppic.c ${EXTENSIONS}/eppic.mk
 
 # Hand-maintained command man pages and the generator for the C help data.
-MAN_FILES=${wildcard man/crash-*.8} man/gen-help-data.py
+MAN_FILES=${wildcard man/crash.8 man/crash-*.8} man/gen-help-data.py
 
 DAEMON_OBJECT_FILES=remote_daemon.o va_server.o va_server_v1.o \
 	lkcd_common.o lkcd_v1.o lkcd_v2_v3.o lkcd_v5.o lkcd_v7.o lkcd_v8.o \
@@ -266,7 +266,7 @@ TARGET_CFLAGS=
 CRASH_CFLAGS=-g -D${TARGET} ${TARGET_CFLAGS} ${GDB_FLAGS} ${CFLAGS}
 
 GPL_FILES=COPYING3
-TAR_FILES=${SOURCE_FILES} Makefile ${GPL_FILES} README crash-release crash.8 \
+TAR_FILES=${SOURCE_FILES} Makefile ${GPL_FILES} README crash-release man/crash.8 \
 	${EXTENSION_SOURCE_FILES} ${MEMORY_DRIVER_FILES} ${MAN_FILES}
 CSCOPE_FILES=${SOURCE_FILES}
 
@@ -382,7 +382,7 @@ install:
 	/usr/bin/install -d ${INSTALLDIR}
 	/usr/bin/install ${PROGRAM} ${INSTALLDIR}
 	/usr/bin/install -d ${MANDIR}/man8
-	/usr/bin/install -m 644 crash.8 ${MANDIR}/man8
+	/usr/bin/install -m 644 man/crash.8 ${MANDIR}/man8
 	/usr/bin/install -m 644 man/crash-*.8 ${MANDIR}/man8
 #	/usr/bin/install ${PROGRAM}d ${INSTALLDIR}
 
@@ -641,7 +641,7 @@ show_files:
 	@if [ -f ${PROGRAM}  ]; then \
 		./${PROGRAM} --no_scroll --no_crashrc -h README > README; fi
 	@echo ${SOURCE_FILES} Makefile ${GDB_FILES} ${GDB_PATCH_FILES} ${GPL_FILES} README \
-	crash-release crash.8 ${EXTENSION_SOURCE_FILES} ${MEMORY_DRIVER_FILES}
+	crash-release ${MAN_FILES} ${EXTENSION_SOURCE_FILES} ${MEMORY_DRIVER_FILES}
 
 ctags:
 	ctags ${SOURCE_FILES}
@@ -683,7 +683,7 @@ do_release:
 	@rm -f ${PROGRAM}-${VERSION}-${RELEASE}.src.rpm
 	@chown root ./RELDIR/${PROGRAM}-${VERSION}
 	@tar cf - ${SOURCE_FILES} Makefile ${GDB_FILES} ${GDB_PATCH_FILES} ${GPL_FILES} \
-	crash-release crash.8 ${EXTENSION_SOURCE_FILES} ${MEMORY_DRIVER_FILES} | \
+	crash-release ${MAN_FILES} ${EXTENSION_SOURCE_FILES} ${MEMORY_DRIVER_FILES} | \
 	(cd ./RELDIR/${PROGRAM}-${VERSION}; tar xf -)
 	@cp ${GDB}.tar.gz ./RELDIR/${PROGRAM}-${VERSION}
 	@./${PROGRAM} --no_scroll --no_crashrc -h README > README

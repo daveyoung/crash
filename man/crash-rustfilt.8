@@ -4,21 +4,14 @@
 .SH NAME
 crash-rustfilt \- demangle a mangled Rust symbol to human readable symbol
 .SH SYNOPSIS
-.in 0
-.nf
-rustfilt <symbol>
-.fi
-.in
+.B rustfilt
+<symbol>
 .SH DESCRIPTION
-.in 0
-.nf
-  This command converts a mangled Rust symbol to human readable symbol.
-.fi
-.in
+.PP
+This command converts a mangled Rust symbol to human readable symbol.
 .SH EXAMPLES
-.in 0
-.nf
-  crash> rustfilt _RNvNtCshc5sK6KjdJJ_6kernel5print11call_printk
-  kernel::print::call_printk
-.fi
-.in
+.PP
+crash> rustfilt _RNvNtCshc5sK6KjdJJ_6kernel5print11call_printk
+kernel::print::call_printk
+.SH SEE ALSO
+.BR crash (8)

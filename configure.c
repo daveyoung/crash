@@ -1492,7 +1492,7 @@ make_spec_file(struct supported_gdb_version *sp)
 	printf("mkdir -p %%{buildroot}/usr/bin\n");
 	printf("make DESTDIR=%%{buildroot} install\n");
 	printf("mkdir -p %%{buildroot}%%{_mandir}/man8\n");
-	printf("cp crash.8 %%{buildroot}%%{_mandir}/man8/crash.8\n");
+	printf("cp man/crash.8 %%{buildroot}%%{_mandir}/man8/crash.8\n");
 	printf("mkdir -p %%{buildroot}%%{_includedir}/crash\n");
 	printf("cp defs.h %%{buildroot}%%{_includedir}/crash\n");
 	printf("mkdir -p %%{buildroot}%%{_libdir}/crash/extensions\n");

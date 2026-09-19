@@ -8,14 +8,17 @@ static char *help_snap[] = {
 "       crash-snap - take a memory snapshot",
 "",
 "SYNOPSIS",
-"snap [-n] dumpfile",
+"       snap [-n] dumpfile",
 "",
 "DESCRIPTION",
-"  This command takes a snapshot of physical memory and creates an ELF vmcore.",
-"  The default vmcore is a kdump-style dumpfile.  Supported on x86, x86_64,",
-"  ia64 and ppc64 architectures only.",
+"       This command takes a snapshot of physical memory and creates an ELF",
+"       vmcore.  The default vmcore is a kdump-style dumpfile.  Supported on",
+"       x86, x86_64, ia64 and ppc64 architectures only.",
 "",
-"    -n  create a netdump-style vmcore (n/a on x86_64).",
+"       -n     create a netdump-style vmcore (n/a on x86_64).",
+"",
+"SEE ALSO",
+"       crash(8)",
 NULL
 };
 

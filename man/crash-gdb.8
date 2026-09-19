@@ -4,30 +4,23 @@
 .SH NAME
 crash-gdb \- gdb command
 .SH SYNOPSIS
-.in 0
-.nf
-gdb command ...
-.fi
-.in
+.B gdb
+command ...
 .SH DESCRIPTION
-.in 0
-.nf
-  This command passes its arguments directly to gdb for processing.
-  This is typically not necessary, but where ambiguities between crash and
-  gdb command names exist, this will force the command to be executed by gdb.
-
-  Alternatively, if "set gdb on" is entered, the session will be run in a
-  mode where all commands are passed directly to gdb.  When running in that
-  mode, native crash commands may be executed by preceding them with the
-  "crash" directive.  To restore native crash mode, enter "set gdb off".
-.fi
-.in
+.PP
+This command passes its arguments directly to gdb for processing.
+This is typically not necessary, but where ambiguities between crash and
+gdb command names exist, this will force the command to be executed by gdb.
+.PP
+Alternatively, if "set gdb on" is entered, the session will be run in a
+mode where all commands are passed directly to gdb.  When running in that
+mode, native crash commands may be executed by preceding them with the
+"crash" directive.  To restore native crash mode, enter "set gdb off".
 .SH EXAMPLES
-.in 0
 .nf
     crash> gdb help
     List of classes of commands:
-    
+
     aliases -- Aliases of other commands
     breakpoints -- Making program stop at certain points
     data -- Examining data
@@ -40,9 +33,10 @@ gdb command ...
     support -- Support facilities
     tracepoints -- Tracing of program execution without stopping the program
     user-defined -- User-defined commands
-    
+
     Type "help" followed by a class name for a list of commands in that class.
     Type "help" followed by command name for full documentation.
     Command name abbreviations are allowed if unambiguous.
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

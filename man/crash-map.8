@@ -4,36 +4,32 @@
 .SH NAME
 crash-map \- store KVM dumpfile memory map data
 .SH SYNOPSIS
-.in 0
-.nf
-map [-a][-f [filename]]
-.fi
-.in
+.B map
+[-a][-f [filename]]
 .SH DESCRIPTION
-.in 0
-.nf
-  The layout of KVM guest dumpfiles created with "virsh dump" does not allow
-  the crash utility to access the system's memory in a random access manner.
-  Therefore, during crash session initialization, a potentially time-consuming
-  dumpfile scan procedure is required to create a physical-memory-to-file-offset
-  map for use during the session.
- 
-  This command may be used to append the memory map data to the dumpfile or
-  to store it in a permanent file.  After this has been done, subsequent crash
-  sessions using the dumpfile will no longer require the scan procedure:
- 
-    -a  Append the memory map to the end of the KVM dumpfile.
-    -f  Create a memory map file.  If no filename argument is entered, the
-        filename will consist of the dumpfile name with ".map" appended,
-        and will be located in the same directory as the dumpfile; it will
-        be recognized and used automatically during subsequent crash sessions.
-        However, if a "filename" argument is entered, and the default location
-        and naming convention are not used, then the new memory map file will
-        have to be added to the crash command line during invocation.
-.fi
-.in
+.PP
+The layout of KVM guest dumpfiles created with "virsh dump" does not allow
+the crash utility to access the system's memory in a random access manner.
+Therefore, during crash session initialization, a potentially time-consuming
+dumpfile scan procedure is required to create a physical-memory-to-file-offset
+map for use during the session.
+.PP
+This command may be used to append the memory map data to the dumpfile or
+to store it in a permanent file.  After this has been done, subsequent crash
+sessions using the dumpfile will no longer require the scan procedure:
+.TP
+.BI \-a
+Append the memory map to the end of the KVM dumpfile.
+.TP
+.BI \-f
+Create a memory map file.  If no filename argument is entered, the
+filename will consist of the dumpfile name with ".map" appended,
+and will be located in the same directory as the dumpfile; it will
+be recognized and used automatically during subsequent crash sessions.
+However, if a "filename" argument is entered, and the default location
+and naming convention are not used, then the new memory map file will
+have to be added to the crash command line during invocation.
 .SH EXAMPLES
-.in 0
 .nf
     crash> map
     MAP FILE IN USE: vmcore.map
@@ -44,4 +40,5 @@ map [-a][-f [filename]]
     crash> map -f /tmp/vmcore.map
     MAP FILE CREATED: /tmp/vmcore.map
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

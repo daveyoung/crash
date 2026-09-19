@@ -4,24 +4,31 @@
 .SH NAME
 crash-s390dbf \- s390dbf prints out debug feature logs
 .SH SYNOPSIS
-.in 0
-.nf
-s390dbf [-v] [-s dirname] [debug log] [debug view]
-.fi
-.in
+.B s390dbf
+[-v] [-s dirname] [debug log] [debug view]
 .SH DESCRIPTION
-.in 0
-.nf
+.PP
 Display Debug logs:
- + If called without parameters, all active debug logs are listed.
- + If called with the name of a debug log, all debug-views for which
++ If called without parameters, all active debug logs are listed.
++ If called with the name of a debug log, all debug-views for which
+.nf
    the debug-log has registered are listed. It is possible thatsome
    of the debug views are not available to 'crash'.
- + If called with the name of a debug-log and an available viewname,
+.fi
+.PP
++ If called with the name of a debug-log and an available viewname,
+.nf
    the specified view is printed.
- + If called with '-s dirname', the s390dbf is saved to the specified
+.fi
+.PP
++ If called with '-s dirname', the s390dbf is saved to the specified
+.nf
    directory
- + If called with '-v', all debug views which are available to
+.fi
+.PP
++ If called with '-v', all debug views which are available to
+.nf
    'crash' are listed
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

@@ -4,20 +4,15 @@
 .SH NAME
 crash-ps \- display process status information
 .SH SYNOPSIS
-.in 0
-.nf
-ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
-     [pid | task | command] ...
-.fi
-.in
+.B ps
+[-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y] [pid | task | command] ...
 .SH DESCRIPTION
-.in 0
+.PP
+This command displays process status for selected, or all, processes
+in the system.  If no arguments are entered, the process data is
+is displayed for all processes.  Specific processes may be selected
+by using the following identifier formats:
 .nf
-  This command displays process status for selected, or all, processes
-  in the system.  If no arguments are entered, the process data is
-  is displayed for all processes.  Specific processes may be selected
-  by using the following identifier formats:
-
        pid  a process PID.
       task  a hexadecimal task_struct pointer.
    command  a command name.  If a command name is made up of letters that
@@ -25,27 +20,37 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
             If the command string is enclosed within "'" characters, then
             the encompassed string must be a POSIX extended regular expression
             that will be used to match task names.
- 
-  The process list may be further restricted by the following options:
-
-        -k  restrict the output to only kernel threads.
-        -u  restrict the output to only user tasks.
-        -G  display only the thread group leader in a thread group.
-        -I  exclude idle threads/tasks from the output.
- -y policy  restrict the output to tasks having a specified scheduling policy
-            expressed by its integer value or by its (case-insensitive) name;
-            multiple policies may be entered in a comma-separated list:
-              0 or NORMAL
-              1 or FIFO
-              2 or RR
-              3 or BATCH
-              4 or ISO
-              5 or IDLE
-              6 or DEADLINE
- 
-  The process identifier types may be mixed.  For each task, the following
-  items are displayed:
- 
+.fi
+.PP
+The process list may be further restricted by the following options:
+.TP
+.BI \-k
+restrict the output to only kernel threads.
+.TP
+.BI \-u
+restrict the output to only user tasks.
+.TP
+.BI \-G
+display only the thread group leader in a thread group.
+.TP
+.BI \-I
+exclude idle threads/tasks from the output.
+.TP
+.BI \-y \ policy
+restrict the output to tasks having a specified scheduling policy
+expressed by its integer value or by its (case-insensitive) name;
+multiple policies may be entered in a comma-separated list:
+0 or NORMAL
+1 or FIFO
+2 or RR
+3 or BATCH
+4 or ISO
+5 or IDLE
+6 or DEADLINE
+.PP
+The process identifier types may be mixed.  For each task, the following
+items are displayed:
+.nf
     1. the process PID.
     2. the parent process PID.
     3. the CPU number that the task ran on last.
@@ -56,53 +61,77 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
     7. the virtual address size of this task in kilobytes.
     8. the resident set size of this task in kilobytes.
     9. the command name.
- 
-  The default output shows the task_struct address of each process under a
-  column titled "TASK".  This can be changed to show the kernel stack 
-  pointer under a column titled "KSTACKP".
- 
-       -s  replace the TASK column with the KSTACKP column.
- 
-  On SMP machines, the active task on each CPU will be highlighted by an
-  angle bracket (">") preceding its information.  If the crash variable
-  "offline" is set to "hide", the active task on an offline CPU will
-  be highlighted by a "-" preceding its information.
- 
-  Alternatively, information regarding parent-child relationships,
-  per-task time usage data, argument/environment data, thread groups,
-  or resource limits may be displayed:
- 
-       -p  display the parental hierarchy of selected, or all, tasks.
-       -c  display the children of selected, or all, tasks.
-       -t  display the task run time, start time, and cumulative user
-           and system times.
-       -l  display the task's last-run timestamp value, using either the
-           task_struct's last_run value, the task_struct's timestamp value
-           or the task_struct's sched_entity last_arrival value, whichever
-           applies, of selected, or all, tasks; the list is sorted with the
-           most recently-run task (with the largest timestamp) shown first,
-           followed by the task's current state.
-       -m  similar to -l, but the timestamp value is translated into days,
-           hours, minutes, seconds, and milliseconds since the task was
-           last run on a cpu.
-  -C cpus  only usable with the -l or -m options, dump the timestamp data
-           in per-cpu blocks, where the cpu[s] can be specified as "1,3,5",
-           "1-3", "1,3,5-7,10", "all", or "a" (shortcut for "all").
-       -a  display the command line arguments and environment strings of
-           selected, or all, user-mode tasks.
-       -g  display tasks by thread group, of selected, or all, tasks.
-       -r  display resource limits (rlimits) of selected, or all, tasks.
-       -S  display a summary consisting of the number of tasks in a task state.
-       -A  display only the active task on each cpu.
-       -H  display no header line.
-       -Y  display the task's scheduling policy and priority.
 .fi
-.in
+.PP
+The default output shows the task_struct address of each process under a
+column titled "TASK".  This can be changed to show the kernel stack
+pointer under a column titled "KSTACKP".
+.TP
+.BI \-s
+replace the TASK column with the KSTACKP column.
+.PP
+On SMP machines, the active task on each CPU will be highlighted by an
+angle bracket (">") preceding its information.  If the crash variable
+"offline" is set to "hide", the active task on an offline CPU will
+be highlighted by a "-" preceding its information.
+.PP
+Alternatively, information regarding parent-child relationships,
+per-task time usage data, argument/environment data, thread groups,
+or resource limits may be displayed:
+.TP
+.BI \-p
+display the parental hierarchy of selected, or all, tasks.
+.TP
+.BI \-c
+display the children of selected, or all, tasks.
+.TP
+.BI \-t
+display the task run time, start time, and cumulative user
+and system times.
+.TP
+.BI \-l
+display the task's last-run timestamp value, using either the
+task_struct's last_run value, the task_struct's timestamp value
+or the task_struct's sched_entity last_arrival value, whichever
+applies, of selected, or all, tasks; the list is sorted with the
+most recently-run task (with the largest timestamp) shown first,
+followed by the task's current state.
+.TP
+.BI \-m
+similar to -l, but the timestamp value is translated into days,
+hours, minutes, seconds, and milliseconds since the task was
+last run on a cpu.
+.TP
+.BI \-C \ cpus
+only usable with the -l or -m options, dump the timestamp data
+in per-cpu blocks, where the cpu[s] can be specified as "1,3,5",
+"1-3", "1,3,5-7,10", "all", or "a" (shortcut for "all").
+.TP
+.BI \-a
+display the command line arguments and environment strings of
+selected, or all, user-mode tasks.
+.TP
+.BI \-g
+display tasks by thread group, of selected, or all, tasks.
+.TP
+.BI \-r
+display resource limits (rlimits) of selected, or all, tasks.
+.TP
+.BI \-S
+display a summary consisting of the number of tasks in a task state.
+.TP
+.BI \-A
+display only the active task on each cpu.
+.TP
+.BI \-H
+display no header line.
+.TP
+.BI \-Y
+display the task's scheduling policy and priority.
 .SH EXAMPLES
-.in 0
+.PP
+Show the process status of all current tasks:
 .nf
-  Show the process status of all current tasks:
-
     crash> ps
        PID    PPID  CPU   TASK    ST  %MEM   VSZ   RSS  COMM
     >     0      0   3  c024c000  RU   0.0     0     0  [swapper]
@@ -165,9 +194,10 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
         687    686   2  f9e52000  IN   0.1  2136  1000  login
         688    687   0  f9dec000  IN   0.1  1732   976  bash
     >   700    688   1  f9d62000  RU   0.0  1048   256  gen12
- 
-  Display the parental hierarchy of the "crash" process on a live system:
-
+.fi
+.PP
+Display the parental hierarchy of the "crash" process on a live system:
+.nf
     crash> ps -p 4249
     PID: 0      TASK: c0252000  CPU: 0   COMMAND: "swapper"
      PID: 1      TASK: c009a000  CPU: 1   COMMAND: "init"
@@ -178,9 +208,10 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
           PID: 1186   TASK: c165a000  CPU: 0   COMMAND: "xterm"
            PID: 1188   TASK: c705e000  CPU: 1   COMMAND: "bash"
             PID: 4249   TASK: c6b9a000  CPU: 0   COMMAND: "crash"
- 
-  Display all children of the "kwm" window manager:
-
+.fi
+.PP
+Display all children of the "kwm" window manager:
+.nf
     crash> ps -c kwm
       PID: 649    TASK: c179a000  CPU: 0   COMMAND: "kwm"
       PID: 682    TASK: c2d58000  CPU: 1   COMMAND: "kwmsound"
@@ -188,9 +219,10 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
       PID: 685    TASK: c053c000  CPU: 0   COMMAND: "krootwm"
       PID: 686    TASK: c13fa000  CPU: 0   COMMAND: "kpanel"
       PID: 687    TASK: c13f0000  CPU: 1   COMMAND: "kbgndwm"
- 
-  Display all threads in a firefox session:
-
+.fi
+.PP
+Display all threads in a firefox session:
+.nf
     crash> ps firefox
        PID    PPID  CPU       TASK        ST  %MEM     VSZ    RSS  COMM
       21273  21256   6  ffff81003ec15080  IN  46.3 1138276 484364  firefox
@@ -203,24 +235,27 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
       26977  21256   4  ffff810021a11820  IN  46.3 1138276 484364  firefox
       26978  21256   5  ffff810003159040  IN  46.3 1138276 484364  firefox
       26979  21256   5  ffff81003a058820  IN  46.3 1138276 484364  firefox
- 
-  Display only the thread group leader in the firefox session:
-
+.fi
+.PP
+Display only the thread group leader in the firefox session:
+.nf
     crash> ps -G firefox
        PID    PPID  CPU       TASK        ST  %MEM     VSZ    RSS  COMM
       21273  21256   0  ffff81003ec15080  IN  46.3 1138276 484364  firefox
- 
-  Show the time usage data for pid 10318:
-
+.fi
+.PP
+Show the time usage data for pid 10318:
+.nf
     crash> ps -t 10318
     PID: 10318  TASK: f7b85550  CPU: 5   COMMAND: "bash"
         RUN TIME: 1 days, 01:35:32
       START TIME: 5209
            UTIME: 95
            STIME: 57
- 
-  Show the process status of PID 1, task f9dec000, and all nfsd tasks:
-
+.fi
+.PP
+Show the process status of PID 1, task f9dec000, and all nfsd tasks:
+.nf
     crash> ps 1 f9dec000 nfsd
        PID    PPID  CPU   TASK    ST  %MEM   VSZ   RSS  COMM
           1      0   1  c0098000  IN   0.0  1096   476  init
@@ -233,9 +268,10 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
         465      1   2  fba6e000  IN   0.0     0     0  [nfsd]
         466      1   1  fba6c000  IN   0.0     0     0  [nfsd]
         467      1   2  fac04000  IN   0.0     0     0  [nfsd]
- 
-  Show all kernel threads:
-
+.fi
+.PP
+Show all kernel threads:
+.nf
     crash> ps -k
        PID    PPID  CPU   TASK    ST  %MEM   VSZ   RSS  COMM
           0      0   1  c0fac000  RU   0.0     0     0  [swapper]
@@ -254,27 +290,30 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
         492      1   1  c0254000  IN   0.0     0     0  [nfsd]
         493      1   0  c0a86000  IN   0.0     0     0  [nfsd]
         494      1   0  c0968000  IN   0.0     0     0  [nfsd]
- 
-  Display a summary consisting of the number of tasks in a task state:
-
+.fi
+.PP
+Display a summary consisting of the number of tasks in a task state:
+.nf
     crash> ps -S
       RU: 5
       IN: 259
       UN: 31
       ZO: 1
- 
-  Display only the active task, on each cpu:
-
+.fi
+.PP
+Display only the active task, on each cpu:
+.nf
     crash> ps -A
         PID    PPID  CPU       TASK        ST  %MEM    VSZ    RSS  COMM
      >    10      2   1  ffff880212969710  IN   0.0      0      0   [migration/1]
      >     0      0   3  ffff884026d43520  RU   0.0      0      0   [swapper]
      >  6582      1   2  ffff880f49c52040  RU   0.0 42202472  33368  oracle
      >  9497      1   0  ffff880549ec2ab0  RU   0.0 42314692 138664  oracle
- 
-  Show all tasks sorted by their task_struct's last_run, timestamp, or
-  sched_entity last_arrival timestamp value, whichever applies:
-
+.fi
+.PP
+Show all tasks sorted by their task_struct's last_run, timestamp, or
+sched_entity last_arrival timestamp value, whichever applies:
+.nf
     crash> ps -l
     [20811245123] [IN] PID: 37    TASK: f7153030  CPU: 2  COMMAND: "events/2"
     [20811229959] [IN] PID: 1756  TASK: f2a5a570  CPU: 2  COMMAND: "ntpd"
@@ -295,10 +334,11 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
     [19837129436] [IN] PID: 2326  TASK: f2ad5030  CPU: 6  COMMAND: "sshd"
     [19289476417] [IN] PID: 1772  TASK: f5665570  CPU: 5  COMMAND: "sendmail"
     ...
-
-  Show the most-recently run tasks on cpu 0 using both the -l and the -m
-  options:
-
+.fi
+.PP
+Show the most-recently run tasks on cpu 0 using both the -l and the -m
+options:
+.nf
     crash> ps -m -C0
     CPU: 0
     [ 0 00:00:00.003] [RU] PID: 1205 TASK: dee03f20 CPU: 0 COMMAND: "insmod"
@@ -311,7 +351,7 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
     [ 0 00:00:00.101] [IN] PID: 1168 TASK: dee01940 CPU: 0 COMMAND: "bash"
     [ 0 00:00:01.404] [IN] PID: 272  TASK: dfa48ca0 CPU: 0 COMMAND: "flush-8:0"
     ...
- 
+
     crash> ps -l -C0
     CPU: 0
     [137146164748] [RU] PID: 1205 TASK: dee03f20 CPU: 0 COMMAND: "insmod"
@@ -323,10 +363,11 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
     [137119564815] [IN] PID: 15   TASK: df46b280 CPU: 0 COMMAND: "kblockd/0"
     [137047715027] [IN] PID: 1168 TASK: dee01940 CPU: 0 COMMAND: "bash"
     [135744209052] [IN] PID: 272  TASK: dfa48ca0 CPU: 0 COMMAND: "flush-8:0"
-    ... 
- 
-  Show the kernel stack pointer of each user task:
-
+    ...
+.fi
+.PP
+Show the kernel stack pointer of each user task:
+.nf
     crash> ps -us
        PID    PPID  CPU  KSTACKP  ST  %MEM   VSZ   RSS  COMM
           1      0   0  c009bedc  IN   0.0  1096    52  init
@@ -338,9 +379,10 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
         381      1   0  c34ddf28  IN   0.2  1316   224  automount
         391      1   1  c2777f28  IN   0.2  1316   224  automount
     ...
- 
-  Display the argument and environment data for the automount task:
-
+.fi
+.PP
+Display the argument and environment data for the automount task:
+.nf
     crash> ps -a automount
     PID: 3948   TASK: f722ee30  CPU: 0   COMMAND: "automount"
     ARG: /usr/sbin/automount --timeout=60 /net program /etc/auto.net
@@ -359,9 +401,10 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
          HOME=/
          SHLVL=2
          _=/usr/sbin/automount
- 
-  Display the tasks in the thread group containing task c20ab0b0:
-
+.fi
+.PP
+Display the tasks in the thread group containing task c20ab0b0:
+.nf
     crash> ps -g c20ab0b0
     PID: 6425   TASK: f72f50b0  CPU: 0   COMMAND: "firefox-bin"
       PID: 6516   TASK: f71bf1b0  CPU: 0   COMMAND: "firefox-bin"
@@ -369,28 +412,33 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
       PID: 6520   TASK: c20aa030  CPU: 0   COMMAND: "firefox-bin"
       PID: 6523   TASK: c20ab0b0  CPU: 0   COMMAND: "firefox-bin"
       PID: 6614   TASK: f1f181b0  CPU: 0   COMMAND: "firefox-bin"
- 
-  Display the tasks in the thread group for each instance of the
-  program named "multi-thread":
-
+.fi
+.PP
+Display the tasks in the thread group for each instance of the
+program named "multi-thread":
+.nf
     crash> ps -g multi-thread
     PID: 2522   TASK: 1003f0dc7f0       CPU: 1   COMMAND: "multi-thread"
       PID: 2523   TASK: 10037b13030       CPU: 1   COMMAND: "multi-thread"
       PID: 2524   TASK: 1003e064030       CPU: 1   COMMAND: "multi-thread"
       PID: 2525   TASK: 1003e13a7f0       CPU: 1   COMMAND: "multi-thread"
-    
+
     PID: 2526   TASK: 1002f82b7f0       CPU: 1   COMMAND: "multi-thread"
       PID: 2527   TASK: 1003e1737f0       CPU: 1   COMMAND: "multi-thread"
       PID: 2528   TASK: 10035b4b7f0       CPU: 1   COMMAND: "multi-thread"
       PID: 2529   TASK: 1003f0c37f0       CPU: 1   COMMAND: "multi-thread"
       PID: 2530   TASK: 10035597030       CPU: 1   COMMAND: "multi-thread"
       PID: 2531   TASK: 100184be7f0       CPU: 1   COMMAND: "multi-thread"
- 
-  Display the resource limits of "bash" task 13896:
-
+.fi
+.PP
+Display the resource limits of "bash" task 13896:
+.nf
     crash> ps -r 13896
     PID: 13896  TASK: cf402000  CPU: 0   COMMAND: "bash"
-       RLIMIT     CURRENT       MAXIMUM
+.fi
+.PP
+.B RLIMIT     CURRENT       MAXIMUM
+.nf
           CPU   (unlimited)   (unlimited)
         FSIZE   (unlimited)   (unlimited)
          DATA   (unlimited)   (unlimited)
@@ -402,9 +450,10 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
       MEMLOCK      4096          4096
            AS   (unlimited)   (unlimited)
         LOCKS   (unlimited)   (unlimited)
- 
-  Search for task names matching a POSIX regular expression:
-
+.fi
+.PP
+Search for task names matching a POSIX regular expression:
+.nf
      crash> ps 'migration*'
         PID    PPID  CPU       TASK        ST  %MEM    VSZ    RSS  COMM
            8      2   0  ffff8802128a2e20  IN   0.0      0      0  [migration/0]
@@ -412,4 +461,5 @@ ps [-k|-u|-G|-I|-y policy] [-s] [-p|-c|-t|-[l|m][-C cpu]|-a|-g|-r|-S|-A|-H|-Y]
           15      2   2  ffff880212989710  IN   0.0      0      0  [migration/2]
           20      2   3  ffff8802129a9710  IN   0.0      0      0  [migration/3]
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

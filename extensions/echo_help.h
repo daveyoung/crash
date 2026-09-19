@@ -8,16 +8,18 @@ static char *help_echo[] = {
 "       crash-echo - echoes back its arguments",
 "",
 "SYNOPSIS",
-"echo arg ...",
+"       echo arg ...",
 "",
 "DESCRIPTION",
-"  This command simply echoes back its arguments.",
+"       This command simply echoes back its arguments.",
 "",
 "EXAMPLES",
-"  Echo back all command arguments:",
+"       Echo back all command arguments:",
+"           crash> echo hello, world",
+"           hello, world",
 "",
-"    crash> echo hello, world",
-"    hello, world",
+"SEE ALSO",
+"       crash(8)",
 NULL
 };
 

@@ -4,21 +4,15 @@
 .SH NAME
 crash-ptob \- page to bytes
 .SH SYNOPSIS
-.in 0
-.nf
-ptob page_number ...
-.fi
-.in
+.B ptob
+page_number ...
 .SH DESCRIPTION
-.in 0
-.nf
-  This command translates a page frame number to its byte value.
-.fi
-.in
+.PP
+This command translates a page frame number to its byte value.
 .SH EXAMPLES
-.in 0
 .nf
     crash> ptob 512a
     512a: 512a000
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

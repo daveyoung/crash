@@ -4,84 +4,96 @@
 .SH NAME
 crash-tree \- display radix tree, XArray, red-black tree or maple tree
 .SH SYNOPSIS
-.in 0
-.nf
-tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member]]]
-       -[x|d] [-o offset] [-l] [-p] [-v] [-N] start
-.fi
-.in
+.B tree
+[-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member]]] -[x|d] [-o offset] [-l] [-p] [-v] [-N] start
 .SH DESCRIPTION
-.in 0
+.PP
+This command dumps the contents of a radix tree, an XAarray, a red-black
+tree, or a maple tree.  The arguments are as follows:
+.TP
+.BI \-t \ type
+The type of tree to dump; the type string can be one of
+"radix", "rbtree", "xarray", or "maple", or alternatively,
+"ra", "rb", "x" or "m" are acceptable. If not specified,
+rbtree is the default type.
+.TP
+.BI \-r \ offset
+If the "start" argument is the address of a data structure that
+contains an radix_tree_root, maple_tree, xarray or rb_root
+structure, then this is the offset to that structure member. If
+the offset is non-zero, then this option is required.  The offset
+may be entered in either of two manners:
+1. In "structure.member" format.
+2. A number of bytes.
+.TP
+.BI \-o \ offset
+For red-black trees only, the offset of the rb_node within its
+containing data structure; if the offset is non-zero, then this
+option is required.  The offset may be entered in either of two
+manners:
+1. In "structure.member" format.
+2. A number of bytes.
+This option is not applicable to radix trees.
+.TP
+.BI \-s \ struct
+For each entry in a tree, format and print it as this type of data
+structure; use the "struct.member" format in order to display a
+particular member of the structure.  To display multiple members
+of a structure, use a comma-separated list of members.  If any
+structure member contains an embedded structure or is an array, the
+the output may be restricted to the embedded structure or an array
+element by expressing the member argument as "struct.member.member"
+or "struct.member[index]"; embedded member specifications may
+extend beyond one level deep by expressing the struct argument as
+"struct.member.member.member...".
+.TP
+.BI \-S \ struct
+Similar to -s, but instead of parsing gdb output, member values
+are read directly from memory, so the command works much faster
+for 1-, 2-, 4-, and 8-byte members.
+.TP
+.BI \-l
+For red-black trees, dump the tree sorted in linear order starting
+with the leftmost node and progressing to the right.  This option
+does not apply to radix trees.
+.TP
+.BI \-p
+Display the node's position information, showing the relationship
+between it and the root.  For red-black trees, a position that
+indicates "root/l/r" means that the node is the right child
+of the left child of the root node.  For radix trees, xarrays and
+maple trees, the index, the height, and the slot index values are
+shown with respect to the root.
+.TP
+.BI \-x
+Override default output format with hexadecimal format.
+.TP
+.BI \-d
+Override default output format with decimal format.
+.TP
+.BI \-v
+For maple trees only, dump the contents of each maple tree node.
+.PP
+The meaning of the "start" argument, which can be expressed either in
+hexadecimal format or symbolically, depends upon whether the -N option
+is prepended:
 .nf
-  This command dumps the contents of a radix tree, an XAarray, a red-black
-  tree, or a maple tree.  The arguments are as follows:
-
-    -t type  The type of tree to dump; the type string can be one of 
-             "radix", "rbtree", "xarray", or "maple", or alternatively,
-             "ra", "rb", "x" or "m" are acceptable. If not specified,
-             rbtree is the default type.
-  -r offset  If the "start" argument is the address of a data structure that
-             contains an radix_tree_root, maple_tree, xarray or rb_root
-             structure, then this is the offset to that structure member. If
-             the offset is non-zero, then this option is required.  The offset
-             may be entered in either of two manners:
-               1. In "structure.member" format.
-               2. A number of bytes.
-  -o offset  For red-black trees only, the offset of the rb_node within its 
-             containing data structure; if the offset is non-zero, then this
-             option is required.  The offset may be entered in either of two
-             manners:
-               1. In "structure.member" format.
-               2. A number of bytes.
-             This option is not applicable to radix trees.
-  -s struct  For each entry in a tree, format and print it as this type of data
-             structure; use the "struct.member" format in order to display a
-             particular member of the structure.  To display multiple members
-             of a structure, use a comma-separated list of members.  If any
-             structure member contains an embedded structure or is an array, the
-             the output may be restricted to the embedded structure or an array
-             element by expressing the member argument as "struct.member.member"
-             or "struct.member[index]"; embedded member specifications may
-             extend beyond one level deep by expressing the struct argument as
-             "struct.member.member.member...".
-  -S struct  Similar to -s, but instead of parsing gdb output, member values
-             are read directly from memory, so the command works much faster
-             for 1-, 2-, 4-, and 8-byte members.
-         -l  For red-black trees, dump the tree sorted in linear order starting
-             with the leftmost node and progressing to the right.  This option
-             does not apply to radix trees.
-         -p  Display the node's position information, showing the relationship
-             between it and the root.  For red-black trees, a position that
-             indicates "root/l/r" means that the node is the right child
-             of the left child of the root node.  For radix trees, xarrays and
-             maple trees, the index, the height, and the slot index values are
-             shown with respect to the root.
-         -x  Override default output format with hexadecimal format.
-         -d  Override default output format with decimal format.
-         -v  For maple trees only, dump the contents of each maple tree node.
- 
-  The meaning of the "start" argument, which can be expressed either in
-  hexadecimal format or symbolically, depends upon whether the -N option
-  is prepended:
- 
       start  The address of a radix_tree_root, maple_tree, xarray or rb_root
              structure, or the address of a structure containing the
              radix_tree_root, maple_tree, xarray or rb_root structure; if the
              latter, then the "-r offset" option must be used if the member
              offset of the root structure is non-zero.
-               
-   -N start  The address of a radix_tree_node, maple_node, xa_node or rb_node
-             structure, bypassing the radix_tree_root, maple_tree, xarray, or
-             rb_root that points to it.
-
 .fi
-.in
+.TP
+.BI \-N \ start
+The address of a radix_tree_node, maple_node, xa_node or rb_node
+structure, bypassing the radix_tree_root, maple_tree, xarray, or
+rb_root that points to it.
 .SH EXAMPLES
-.in 0
+.PP
+The vmap_area_root is a standalone rb_root structure.  Display the
+virtual addresses of each vmap_area in its red-black tree:
 .nf
-  The vmap_area_root is a standalone rb_root structure.  Display the 
-  virtual addresses of each vmap_area in its red-black tree:
-
     crash> whatis vmap_area_root
     struct rb_root vmap_area_root;
     crash> tree -t rbtree -o vmap_area.rb_node vmap_area_root
@@ -90,11 +102,12 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
     ffff88012c9afec0
     ffff88012d65c440
     ...
-
-  Display the vmap_area's va_start and va_end members of each of
-  the entries above expressing the vmap_area.rb_node offset as a
-  number of bytes:
-
+.fi
+.PP
+Display the vmap_area's va_start and va_end members of each of
+the entries above expressing the vmap_area.rb_node offset as a
+number of bytes:
+.nf
     crash> tree -t rbtree -o 24 vmap_area_root -s vmap_area.va_start,va_end
     ffff880128c508c0
       va_start = 0xffffc90014900000
@@ -109,10 +122,11 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
       va_start = 0xffffc90000620000
       va_end = 0xffffc90000622000
     ...
-
-  Alternatively, use the -N option with the rb_node address contained
-  in the vmap_area_root structure:
-
+.fi
+.PP
+Alternatively, use the -N option with the rb_node address contained
+in the vmap_area_root structure:
+.nf
     crash> p vmap_area_root
     vmap_area_root = $8 = {
       rb_node = 0xffff880128c508d8
@@ -122,11 +136,12 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
     ffff88012cb68140
     ffff88012c9afec0
     ffff88012d65c440
- 
-  Display the virtual address of each vm_area_struct in the red-black
-  tree that has its root inside an mm_struct located at ffff880128b5a300.
-  The vm_area_struct.vm_rb rb_node member has an offset of 0x38 bytes:
-
+.fi
+.PP
+Display the virtual address of each vm_area_struct in the red-black
+tree that has its root inside an mm_struct located at ffff880128b5a300.
+The vm_area_struct.vm_rb rb_node member has an offset of 0x38 bytes:
+.nf
     crash> tree -t rbtree -r mm_struct.mm_rb ffff880128b5a300 -o 0x38
     ffff88012a0de080
     ffff880123e3ac78
@@ -137,9 +152,10 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
     ffff8801292e7958
     ffff880123e3a318
     ffff880123e3ad40
- 
-  Add the -p option to the command above to show position information:
-
+.fi
+.PP
+Add the -p option to the command above to show position information:
+.nf
     crash> tree -t rbtree -r mm_struct.mm_rb ffff880128b5a300 -o 0x38 -p
     ffff88012a0de080
       position: root
@@ -158,12 +174,16 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
       position: root/r/r/r
     ffff880123e3ad40
       position: root/r/r/r/r
-
-  Given an mm_struct address of 0xffff880074b5be80, list the VMA tree in linear
-  order from the leftmost node progressing to the right using the -l option:
-
+.fi
+.PP
+Given an mm_struct address of 0xffff880074b5be80, list the VMA tree in linear
+order from the leftmost node progressing to the right using the -l option:
+.nf
     crash> tree -ls vm_area_struct.vm_start -o vm_area_struct.vm_rb \e
-    -r mm_struct.mm_rb 0xffff880074b5be80 | paste - -
+.fi
+.TP
+.BI \-r \ mm_struct.mm_rb \ 0xffff880074b5be80 \ | \ paste \ \- \ \-
+.nf
     ffff88001f2c50e0	  vm_start = 0x400000
     ffff88001f2c5290	  vm_start = 0xceb000
     ffff880074bfc6c0	  vm_start = 0xcec000
@@ -184,11 +204,15 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
     ffff88001f2c4288	  vm_start = 0x7ff6bc207000
     ffff88001f2c4510	  vm_start = 0x7ffc7a5fc000
     ffff88001f2c5b00	  vm_start = 0x7ffc7a6d1000
-
-  Compared to the top/down root/leaves order:
-
+.fi
+.PP
+Compared to the top/down root/leaves order:
+.nf
     crash> tree -s vm_area_struct.vm_start -o vm_area_struct.vm_rb \e
-    -r mm_struct.mm_rb 0xffff880074b5be80 | paste - -
+.fi
+.TP
+.BI \-r \ mm_struct.mm_rb \ 0xffff880074b5be80 \ | \ paste \ \- \ \-
+.nf
     ffff88001f2c5a28	  vm_start = 0x7ff6bbbb9000
     ffff88001f2c55f0	  vm_start = 0x7ff6bb252000
     ffff88000e06a360	  vm_start = 0x7ff6ac6c3000
@@ -213,10 +237,11 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
     ffff880074bfd6c8	  vm_start = 0x7ff6bc206000
     ffff88001f2c4510	  vm_start = 0x7ffc7a5fc000
     ffff88001f2c5b00	  vm_start = 0x7ffc7a6d1000
-
-  Display a list of the page structs in the radix tree of an address_space
-  structure located at ffff88012d364de0:
-
+.fi
+.PP
+Display a list of the page structs in the radix tree of an address_space
+structure located at ffff88012d364de0:
+.nf
     crash> tree -t radix -r address_space.page_tree ffff88012d364de0
     ffffea00040d12c0
     ffffea00040d9a60
@@ -228,9 +253,10 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
     ffffea00040baf48
     ffffea0004043f48
     ffffea000407de58
- 
-  Add the -p option to the command above to show position information:
-
+.fi
+.PP
+Add the -p option to the command above to show position information:
+.nf
     crash> tree -t radix -r address_space.page_tree ffff88012d364de0 -p
     ffffea00040d12c0
       index: 0  position: root/0/0
@@ -251,15 +277,16 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
       index: 219  position: root/3/27
     ffffea000407de58
       index: 220  position: root/3/28
-
-  Alternatively, take the address of the radix_tree_node from the
-  radix_tree_root structure in the address_space structure above,
-  and display the tree with the -N option:
-
+.fi
+.PP
+Alternatively, take the address of the radix_tree_node from the
+radix_tree_root structure in the address_space structure above,
+and display the tree with the -N option:
+.nf
     crash> struct address_space.page_tree ffff88012d364de0
       page_tree = {
-        height = 0x2, 
-        gfp_mask = 0x20, 
+        height = 0x2,
+        gfp_mask = 0x20,
         rnode = 0xffff8801238add71
       }
     crash> tree -t radix -N 0xffff8801238add71
@@ -270,11 +297,12 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
     ffffea0004084288
     ffffea00040843a0
     ...
- 
-  Using the same radix tree as above, display the flags and _count
-  members of each page struct in the list, and force the output format
-  to be hexadecimal:
-
+.fi
+.PP
+Using the same radix tree as above, display the flags and _count
+members of each page struct in the list, and force the output format
+to be hexadecimal:
+.nf
     crash> tree -t radix -N 0xffff8801238add71 -s page.flags,_count -x
     ffffea00040d12c0
       flags = 0x4000000002006c
@@ -297,12 +325,13 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
         counter = 0x7
       }
     ...
-
-  In more recent kernels, the XArray facility has replaced radix trees.
-  Display a list of the page structs in the XArray of an address_space
-  structure located at 0xffff94c235e76828, where the i_pages field is
-  an embedded xarray structure:
-
+.fi
+.PP
+In more recent kernels, the XArray facility has replaced radix trees.
+Display a list of the page structs in the XArray of an address_space
+structure located at 0xffff94c235e76828, where the i_pages field is
+an embedded xarray structure:
+.nf
     crash> tree -t xarray -r address_space.i_pages 0xffff94c235e76828
     fffffcc005aa8380
     fffffcc005cafa80
@@ -315,9 +344,10 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
     fffffcc005c9a100
     fffffcc005a49e40
     fffffcc005c95a80
-    
-  Add the -p option to the command above to show position information:
-
+.fi
+.PP
+Add the -p option to the command above to show position information:
+.nf
     crash> tree -t xarray -r address_space.i_pages 0xffff94c235e76828 -p
     fffffcc005aa8380
       index: 90  position: root/1/26
@@ -341,14 +371,15 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
       index: 99  position: root/1/35
     fffffcc005c95a80
       index: 100  position: root/1/36
-    
-  Alternatively, take the value found in the xa_head field from
-  the xarray structure, and display the tree with the -N option:
-
+.fi
+.PP
+Alternatively, take the value found in the xa_head field from
+the xarray structure, and display the tree with the -N option:
+.nf
     crash> address_space.i_pages 0xffff94c235e76828
       i_pages = {
         ... [ xa_lock field not shown ] ...
-        xa_flags = 1, 
+        xa_flags = 1,
         xa_head = 0xffff94c23c1566ca
       }
     crash> tree -t x -N 0xffff94c23c1566ca
@@ -363,12 +394,13 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
     fffffcc005c9a100
     fffffcc005a49e40
     fffffcc005c95a80
-     
-  Using the same xarray command as above, display the flags and _refcount
-  members of each page struct in the list, and force the output format
-  to be hexadecimal:
-
-    crash> tree -t x -N 0xffff94c23c1566ca -s page.flags,_refcount -x 
+.fi
+.PP
+Using the same xarray command as above, display the flags and _refcount
+members of each page struct in the list, and force the output format
+to be hexadecimal:
+.nf
+    crash> tree -t x -N 0xffff94c23c1566ca -s page.flags,_refcount -x
     fffffcc005aa8380
       flags = 0x57ffffc0000014
       _refcount = {
@@ -424,10 +456,11 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
       _refcount = {
         counter = 0x1
       }
-
-  The -v option is introduced specifically for dumping the complete content of
-  maple tree:
-
+.fi
+.PP
+The -v option is introduced specifically for dumping the complete content of
+maple tree:
+.nf
     crash> tree -t maple 0xffff9034c006aec0 -v
 
     maple_tree(ffff9034c006aec0) flags 309, height 2 root 0xffff9034de70041e
@@ -438,9 +471,10 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
         94643156942848-94643158024191: 0xffff9035131754c0
         94643158024192-94643160117247: 0x0
         ...
-
-  The existing options can work as well for maple tree:
-
+.fi
+.PP
+The existing options can work as well for maple tree:
+.nf
     crash> tree -t maple -r mm_struct.mm_mt 0xffff9034c006aec0 -p
     ffff9035131754c0
       index: 1  position: root/0/1
@@ -465,4 +499,5 @@ tree [-t [radix|xarray|rbtree|maple]] [-r offset] [-[s|S] struct[.member[,member
       vm_end = 0x5613d3f14000,
     ....
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

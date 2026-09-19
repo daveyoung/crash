@@ -5,41 +5,44 @@
 .SH NAME
 crash-dminfo \- device mapper (dm) information
 .SH SYNOPSIS
-.in 0
-.nf
-dminfo [-b bio | -d | -l | -q | -s | -t]
-.fi
-.in
+.B dminfo
+[-b bio | -d | -l | -q | -s | -t]
 .SH DESCRIPTION
-.in 0
-.nf
-  This command displays information about device-mapper mapped 
-  devices (dm devices).
-  If no argument is entered, displays lists of existing dm devices.
-  It's same as -l option.
-
-    -b bio  displays the information of the dm device which the bio
-            is submitted in.  If the bio isn't for dm devices,
-            results will be error.
-        -d  displays dependency information for existing dm devices.
-        -l  displays lists of existing dm devices.
-        -q  displays queued I/O information for each target of
-            existing dm devices.
-        -s  displays status information for each target of existing
-            dm devices.
-        -t  displays table information for each target of existing
-            dm devices.
-
-.fi
-.in
+.PP
+This command displays information about device-mapper mapped
+devices (dm devices).
+If no argument is entered, displays lists of existing dm devices.
+It's same as -l option.
+.TP
+.BI \-b \ bio
+displays the information of the dm device which the bio
+is submitted in.  If the bio isn't for dm devices,
+results will be error.
+.TP
+.BI \-d
+displays dependency information for existing dm devices.
+.TP
+.BI \-l
+displays lists of existing dm devices.
+.TP
+.BI \-q
+displays queued I/O information for each target of
+existing dm devices.
+.TP
+.BI \-s
+displays status information for each target of existing
+dm devices.
+.TP
+.BI \-t
+displays table information for each target of existing
+dm devices.
 .SH EXAMPLES
-.in 0
+.PP
+Display lists of dm devices.  "MAP_DEV" is the address of the
+struct mapped_device.  "DM_TABLE" is the address of the struct
+dm_table.  "TARGETS" is the number of targets which are in
+the struct dm_table.
 .nf
-  Display lists of dm devices.  "MAP_DEV" is the address of the
-  struct mapped_device.  "DM_TABLE" is the address of the struct
-  dm_table.  "TARGETS" is the number of targets which are in
-  the struct dm_table.
-
     crash> dminfo
     MAJ  MIN  MAP_DEV           DM_TABLE          TARGETS  MAPNAME
     253  8    c4866c80          c4866280          1        vg0-snap0
@@ -51,13 +54,14 @@ dminfo [-b bio | -d | -l | -q | -s | -t]
     253  3    f5dc4280          cba81d80          1        dummy0
     253  2    f7c53180          c4866180          1        vg0-lv0
     253  1    f746d280          f746cd80          1        mp0p1
-
-  Display the dm device information which the bio is submitted in.
-  The bio (ceacee80) is a clone of the bio (ceacee00) which is
-  submitted in the dm-3 (dummy0).  And the bio (ceacee00) is a clone
-  of the bio (ceaced80) which is submitted in the dm-4 (dummy1), too.
-  The bio (ceaced80) is the original bio.
-
+.fi
+.PP
+Display the dm device information which the bio is submitted in.
+The bio (ceacee80) is a clone of the bio (ceacee00) which is
+submitted in the dm-3 (dummy0).  And the bio (ceacee00) is a clone
+of the bio (ceaced80) which is submitted in the dm-4 (dummy1), too.
+The bio (ceaced80) is the original bio.
+.nf
     crash> dminfo -b ceacee80
     DM_BIO_ADDRESS    MAJ  MIN  MAP_DEV           DEVNAME
     ceacee00          253  3    f5dc4280          dm-3
@@ -66,36 +70,50 @@ dminfo [-b bio | -d | -l | -q | -s | -t]
     ceaced80          253  4    d441e280          dm-4
     crash> dminfo -b ceaced80
     dminfo: invalid kernel virtual address: 64  type: "GET_VALUE: dm_io.bio"
-
-  Display dependency information for each target.
-  The vg0-snap0 depends on thd dm-6 (vg0-lv0-real) and the dm-7
-  (vg0-snap0-cow)
-
+.fi
+.PP
+Display dependency information for each target.
+The vg0-snap0 depends on thd dm-6 (vg0-lv0-real) and the dm-7
+(vg0-snap0-cow)
+.nf
     crash> dminfo -d
     MAJ  MIN  MAP_DEV           DM_TABLE          TARGETS  MAPNAME
     253  8    c4866c80          c4866280          1        vg0-snap0
-      MAJ  MIN  GENDISK           COUNT  DEVNAME
+.fi
+.PP
+.B MAJ  MIN  GENDISK           COUNT  DEVNAME
+.nf
       253  7    c4866980          1      dm-7
       253  6    f6a04280          1      dm-6
 
     MAJ  MIN  MAP_DEV           DM_TABLE          TARGETS  MAPNAME
     253  6    f6a04a80          f6a04580          1        vg0-lv0-real
-      MAJ  MIN  GENDISK           COUNT  DEVNAME
+.fi
+.PP
+.B MAJ  MIN  GENDISK           COUNT  DEVNAME
+.nf
       8    0    f7f24c80          1      sda
 
     MAJ  MIN  MAP_DEV           DM_TABLE          TARGETS  MAPNAME
     253  7    c4866a80          c4866380          1        vg0-snap0-cow
-      MAJ  MIN  GENDISK           COUNT  DEVNAME
+.fi
+.PP
+.B MAJ  MIN  GENDISK           COUNT  DEVNAME
+.nf
       8    0    f7f24c80          1      sda
 
     MAJ  MIN  MAP_DEV           DM_TABLE          TARGETS  MAPNAME
     253  2    f7c53180          c4866180          1        vg0-lv0
-      MAJ  MIN  GENDISK           COUNT  DEVNAME
+.fi
+.PP
+.B MAJ  MIN  GENDISK           COUNT  DEVNAME
+.nf
       253  6    f6a04280          1      dm-6
-
-  Display queued I/O information for each target.
-  The information is displayed under the "PRIVATE_DATA" column.
-
+.fi
+.PP
+Display queued I/O information for each target.
+The information is displayed under the "PRIVATE_DATA" column.
+.nf
     crash> dminfo -q
     MAJ  MIN  MAP_DEV           DM_TABLE          TARGETS  MAPNAME
     253  5    f7c50c80          c488e480          1        via_cbeheddbdd
@@ -117,10 +135,11 @@ dminfo [-b bio | -d | -l | -q | -s | -t]
     253  1    f746d280          f746cd80          1        mp0p1
       TARGET            TARGET_TYPE  PRIVATE_DATA
       f8821080          linear       No queue info
-
-  Display status information for each target.
-  The information is displayed under the "PRIVATE_DATA" column.
-
+.fi
+.PP
+Display status information for each target.
+The information is displayed under the "PRIVATE_DATA" column.
+.nf
     crash> dminfo -s
     MAJ  MIN  MAP_DEV           DM_TABLE          TARGETS  MAPNAME
     253  0    c4840380          c4841880          1        mp0
@@ -150,10 +169,11 @@ dminfo [-b bio | -d | -l | -q | -s | -t]
     253  1    f746d280          f746cd80          1        mp0p1
       TARGET            TARGET_TYPE  PRIVATE_DATA
       f8821080          linear       No status info
-
-  Display table information for each target.
-  The information is displayed under the "PRIVATE_DATA" column.
-
+.fi
+.PP
+Display table information for each target.
+The information is displayed under the "PRIVATE_DATA" column.
+.nf
     crash> dminfo -t
     MAJ  MIN  MAP_DEV           DM_TABLE          TARGETS  MAPNAME
     253  8    c4866c80          c4866280          1        vg0-snap0
@@ -197,4 +217,5 @@ dminfo [-b bio | -d | -l | -q | -s | -t]
       TARGET            TARGET_TYPE  PRIVATE_DATA
       f8821080          linear       begin:0 len:2040192 dev:253:0 offset:63
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

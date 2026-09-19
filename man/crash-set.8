@@ -4,34 +4,39 @@
 .SH NAME
 crash-set \- set a process context or internal crash variable
 .SH SYNOPSIS
-.in 0
-.nf
-set [[-a] [pid | taskp] | [-c cpu] | -p] | [crash_variable [setting]] | -v
-.fi
-.in
+.B set
+[[-a] [pid | taskp] | [-c cpu] | -p] | [crash_variable [setting]] | -v
 .SH DESCRIPTION
-.in 0
+.PP
+This command either sets a new context, or gets the current context for
+display.  The context can be set by the use of:
 .nf
-  This command either sets a new context, or gets the current context for
-  display.  The context can be set by the use of:
-
       pid  a process PID.
     taskp  a hexadecimal task_struct pointer.
-       -a  sets the pid or task as the active task on its cpu (dumpfiles only).
-   -c cpu  sets the context to the active task on a cpu (dumpfiles only).
-       -p  sets the context to the panic task, or back to the crash task on
-           a live system.
-       -v  display the current state of internal crash variables.
-
-  If no argument is entered, the current context is displayed.  The context
-  consists of the PID, the task pointer, the CPU, and task state.  The task
-  state shows the bits found in both the task_struct state and exit_state
-  fields.
-  
-  This command may also be used to set internal crash variables.  If no value
-  argument is entered, the current value of the crash variable is shown.  These
-  are the crash variables, acceptable arguments, and purpose:
-
+.fi
+.TP
+.BI \-a
+sets the pid or task as the active task on its cpu (dumpfiles only).
+.TP
+.BI \-c \ cpu
+sets the context to the active task on a cpu (dumpfiles only).
+.TP
+.BI \-p
+sets the context to the panic task, or back to the crash task on
+a live system.
+.TP
+.BI \-v
+display the current state of internal crash variables.
+.PP
+If no argument is entered, the current context is displayed.  The context
+consists of the PID, the task pointer, the CPU, and task state.  The task
+state shows the bits found in both the task_struct state and exit_state
+fields.
+.PP
+This command may also be used to set internal crash variables.  If no value
+argument is entered, the current value of the crash variable is shown.  These
+are the crash variables, acceptable arguments, and purpose:
+.nf
           scroll  on | off     controls output scrolling.
           scroll  less         /usr/bin/less as the output scrolling program.
           scroll  more         /bin/more as the output scrolling program.
@@ -48,7 +53,7 @@ set [[-a] [pid | taskp] | [-c cpu] | -p] | [crash_variable [setting]] | -v
                                is displayed.
             hash  on | off     controls internal list verification.
           silent  on | off     turns off initialization messages; turns off
-                               crash prompt during input file execution. 
+                               crash prompt during input file execution.
                                (scrolling is turned off if silent is on)
             edit  vi | emacs   set line editing mode (from .crashrc file only).
         namelist  filename     name of kernel (from .crashrc file only).
@@ -59,7 +64,7 @@ set [[-a] [pid | taskp] | [-c cpu] | -p] | [crash_variable [setting]] | -v
                                stop at the first NULL encountered.
              gdb  on | off     if on, the crash session will be run in a mode
                                where all commands will be passed directly to
-                               gdb, and the command prompt will change to 
+                               gdb, and the command prompt will change to
                                "gdb>"; when running in this mode, native crash
                                commands may be executed by preceding them with
                                the "crash" directive.
@@ -87,50 +92,52 @@ set [[-a] [pid | taskp] | [-c cpu] | -p] | [crash_variable [setting]] | -v
                                "filename": error messages are only sent to the
                                  specified filename; they are not displayed on
                                  the console and are not sent to a pipe or file.
- 
-  Internal variables may be set in four manners:
-
+.fi
+.PP
+Internal variables may be set in four manners:
+.nf
     1. entering the set command in $HOME/.crashrc.
     2. entering the set command in .crashrc in the current directory.
     3. executing an input file containing the set command.
     4. during runtime with this command.
-
-  During initialization, $HOME/.crashrc is read first, followed by the
-  .crashrc file in the current directory.  Set commands in the .crashrc file
-  in the current directory override those in $HOME/.crashrc.  Set commands 
-  entered with this command or by runtime input file override those
-  defined in either .crashrc file.  Multiple set command arguments or argument
-  pairs may be entered in one command line.
 .fi
-.in
+.PP
+During initialization, $HOME/.crashrc is read first, followed by the
+\&.crashrc file in the current directory.  Set commands in the .crashrc file
+in the current directory override those in $HOME/.crashrc.  Set commands
+entered with this command or by runtime input file override those
+defined in either .crashrc file.  Multiple set command arguments or argument
+pairs may be entered in one command line.
 .SH EXAMPLES
-.in 0
+.PP
+Set the current context to task c2fe8000:
 .nf
-  Set the current context to task c2fe8000:
-
     crash> set c2fe8000
          PID: 15917
      COMMAND: "bash"
-        TASK: c2fe8000  
+        TASK: c2fe8000
          CPU: 0
        STATE: TASK_INTERRUPTIBLE
-
-  Set the context back to the panicking task:
-
+.fi
+.PP
+Set the context back to the panicking task:
+.nf
     crash> set -p
          PID: 698
      COMMAND: "gen12"
         TASK: f9d78000
          CPU: 2
        STATE: TASK_RUNNING (PANIC)
-
-  Turn off output scrolling:
-
+.fi
+.PP
+Turn off output scrolling:
+.nf
     crash> set scroll off
     scroll: off (/usr/bin/less)
- 
-  Show the current state of crash internal variables:
-
+.fi
+.PP
+Show the current state of crash internal variables:
+.nf
     crash> set -v
             scroll: on (/usr/bin/less)
              radix: 10 (decimal)
@@ -151,15 +158,16 @@ set [[-a] [pid | taskp] | [-c cpu] | -p] | [crash_variable [setting]] | -v
            offline: show
            redzone: on
              error: default
- 
-  Show the current context:
-
+.fi
+.PP
+Show the current context:
+.nf
     crash> set
          PID: 1525
      COMMAND: "bash"
         TASK: c1ede000
          CPU: 0
        STATE: TASK_INTERRUPTIBLE
-
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)

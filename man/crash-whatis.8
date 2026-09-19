@@ -4,45 +4,47 @@
 .SH NAME
 crash-whatis \- search symbol table for data or type information
 .SH SYNOPSIS
-.in 0
-.nf
-whatis [[-o] [struct | union | typedef | symbol]] | 
-         [[-r [size|range]] [-m member]]
-.fi
-.in
+.B whatis
+[[-o] [struct | union | typedef | symbol]] | [[-r [size|range]] [-m member]]
 .SH DESCRIPTION
-.in 0
+.PP
+This command displays the definition of structures, unions, typedefs or
+text/data symbols:
 .nf
-  This command displays the definition of structures, unions, typedefs or
-  text/data symbols:
-
     struct  a structure name. The output is the same as if the "struct"
             command was used.
      union  a union name. The output is the same as if the "union" command
             was used.
-        -o  display the offsets of structure/union members.
+.fi
+.TP
+.BI \-o
+display the offsets of structure/union members.
+.nf
    typedef  a typedef name. If the typedef translates to a structure or union
             the output is the same as if the "struct" or "union" command
             was used. If the typedef is a primitive datatype, the one-line
             declaration is displayed.
-    symbol  a kernel symbol.  
-
-  Alternatively, a search can be made for data structures of a given size or
-  size range, that contain a member of a given type, or contain a pointer to
-  given type.  The -r and -m options may be used alone or in conjunction with
-  one another:
-
-   -r size  search for structures of this exact size.
-  -r range  search for structures of a range of sizes, expressed as "low-high".
- -m member  search for structures that contain a member of this data type, or
-            that contain a pointer to this data type; if a structure contains 
-            another structure, the members of the embedded structure will also
-            be subject to the search. The member argument may also be expressed
-            as a substring of a member's data type.
+    symbol  a kernel symbol.
 .fi
-.in
+.PP
+Alternatively, a search can be made for data structures of a given size or
+size range, that contain a member of a given type, or contain a pointer to
+given type.  The -r and -m options may be used alone or in conjunction with
+one another:
+.TP
+.BI \-r \ size
+search for structures of this exact size.
+.TP
+.BI \-r \ range
+search for structures of a range of sizes, expressed as "low-high".
+.TP
+.BI \-m \ member
+search for structures that contain a member of this data type, or
+that contain a pointer to this data type; if a structure contains
+another structure, the members of the embedded structure will also
+be subject to the search. The member argument may also be expressed
+as a substring of a member's data type.
 .SH EXAMPLES
-.in 0
 .nf
    Display the definition of a linux_binfmt structure:
 
@@ -69,10 +71,11 @@ whatis [[-o] [struct | union | typedef | symbol]] |
       [48] unsigned long min_coredump;
     }
     SIZE: 56
-
-  Since a kmem_bufctl_t is typedef'd to be a kmem_bufctl_s structure, the
-  output of the following two commands is identical:
-
+.fi
+.PP
+Since a kmem_bufctl_t is typedef'd to be a kmem_bufctl_s structure, the
+output of the following two commands is identical:
+.nf
     crash> whatis kmem_bufctl_s
     struct kmem_bufctl_s {
       union {
@@ -81,7 +84,7 @@ whatis [[-o] [struct | union | typedef | symbol]] |
         void *buf_objp;
       } u;
     };
-    
+
     crash> whatis kmem_bufctl_t
     struct kmem_bufctl_s {
       union {
@@ -91,25 +94,31 @@ whatis [[-o] [struct | union | typedef | symbol]] |
       } u;
     };
     SIZE: 4  (0x4)
-    
-  Display the type data of sys_read() and jiffies text and data symbols:
-
+.fi
+.PP
+Display the type data of sys_read() and jiffies text and data symbols:
+.nf
     crash> whatis sys_read
     ssize_t sys_read(unsigned int, char *, size_t);
- 
+
     crash> whatis jiffies
     long unsigned int jiffies;
-
-  Display definition of a kdev_t typedef:
-
+.fi
+.PP
+Display definition of a kdev_t typedef:
+.nf
     crash> whatis kdev_t
     typedef short unsigned int kdev_t;
     SIZE: 2  (0x2)
-
-  Display all structures which have a size of 192 bytes:
-
+.fi
+.PP
+Display all structures which have a size of 192 bytes:
+.nf
     crash> whatis -r 192
-    SIZE  TYPE
+.fi
+.PP
+.B SIZE  TYPE
+.nf
      192  _intel_private
      192  blkcg_gq
      192  clock_event_device
@@ -134,12 +143,16 @@ whatis [[-o] [struct | union | typedef | symbol]] |
      192  timerfd_ctx
      192  tpm_vendor_specific
      192  urb
-
-  Display all structures that contain members that point to 
-  an mm_struct:
-
+.fi
+.PP
+Display all structures that contain members that point to
+an mm_struct:
+.nf
     crash> whatis -m mm_struct
-    SIZE  TYPE
+.fi
+.PP
+.B SIZE  TYPE
+.nf
       16  tlb_state
       24  flush_tlb_info
       24  ftrace_raw_xen_mmu_pgd
@@ -159,12 +172,16 @@ whatis [[-o] [struct | union | typedef | symbol]] |
      256  linux_binprm
     2616  rq
     2936  task_struct
-
-  Display all structures sized from 256 to 512 bytes that
-  contain members that point to a task_struct:
-
+.fi
+.PP
+Display all structures sized from 256 to 512 bytes that
+contain members that point to a task_struct:
+.nf
     crash> whatis -r 256-512 -m task_struct
-    SIZE  TYPE
+.fi
+.PP
+.B SIZE  TYPE
+.nf
      256  file
      256  od_cpu_dbs_info_s
      264  srcu_notifier_head
@@ -185,4 +202,5 @@ whatis [[-o] [struct | union | typedef | symbol]] |
      424  hvc_struct
      496  psmouse
 .fi
-.in
+.SH SEE ALSO
+.BR crash (8)
