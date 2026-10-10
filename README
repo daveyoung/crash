@@ -136,6 +136,21 @@
   o  On an arm64 host, an arm64 binary that can be used to analyze
      x86_64 dumpfiles may be built by typing "make target=X86_64".
 
+  o  Several targets can be built in one run with a comma-separated list.
+     Whenever target= is used the binary is named "crash-<arch>", including
+     the host; a plain "make" still produces "crash".  On an x86_64 host,
+     "make target=ARM64,LOONGARCH64" builds "crash-arm64" and
+     "crash-loongarch64", "make target=X86_64,ARM64" builds "crash-x86_64"
+     and "crash-arm64", and "make target=all" builds every host-word-size
+     target (crash-arm64, crash-ppc64, crash-riscv64, crash-loongarch64 and
+     crash-x86_64).  A single multi-target embedded gdb serves all of them;
+     only the objects that depend on the target are rebuilt as it changes.
+
+  o  The 32-bit targets (X86, ARM and MIPS on an x86_64 host, PPC on a PPC64
+     host) need a gdb built with -m32 and therefore cannot share the
+     multi-target gdb.  Build them one at a time, as in "make target=X86";
+     the embedded gdb is rebuilt with -m32 for it.
+
   Traditionally when vmcores are compressed via the makedumpfile(8) facility
   the libz compression library is used, and by default the crash utility
   only supports libz.  Recently makedumpfile has been enhanced to optionally

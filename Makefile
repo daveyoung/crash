@@ -308,13 +308,135 @@ ifeq ($(findstring valgrind,$(MAKECMDGOALS)),valgrind)
 CONF_TARGET_FLAG += -x valgrind
 endif
 
+#
+# Optional debug-target selection.
+#
+#   make                            build crash for the host
+#   make target=ARM64               build crash-arm64
+#   make target=ARM64,LOONGARCH64   build crash-arm64 and crash-loongarch64
+#   make target=X86_64,ARM64        build crash-x86_64 and crash-arm64
+#   make target=all                 build every host-word-size target
+#
+# Whenever target= is used the binary is named crash-<arch>, including the
+# host; a plain make produces "crash".  One embedded gdb is configured with
+# --enable-targets, so a single multi-target gdb serves all of them and only
+# the objects that depend on crash's -D<TARGET> are rebuilt per target.
+#
+empty :=
+space := $(empty) $(empty)
+comma := ,
+ifneq ($(CROSS_COMPILE),)
+HOST_TARGET := $(CONF_TARGET_ARCH)
+else
+HOST_TARGET := $(shell uname -m | sed \
+	-e 's/^i.86$$/X86/' -e 's/^x86_64$$/X86_64/' \
+	-e 's/^aarch64$$/ARM64/' -e 's/^arm.*$$/ARM/' \
+	-e 's/^ppc64le$$/PPC64/' -e 's/^ppc64$$/PPC64/' -e 's/^ppc$$/PPC/' \
+	-e 's/^s390x$$/S390X/' -e 's/^s390$$/S390/' \
+	-e 's/^riscv64$$/RISCV64/' -e 's/^loongarch64$$/LOONGARCH64/' \
+	-e 's/^mips64$$/MIPS64/' -e 's/^mips$$/MIPS/' \
+	-e 's/^sparc64$$/SPARC64/' -e 's/^alpha$$/ALPHA/' -e 's/^ia64$$/IA64/')
+endif
+
+# Host-word-size targets ("all") and the 32-bit ones.  A 32-bit target needs
+# a gdb built with -m32, cannot share the multi-target gdb, and is built one
+# at a time through the old per-target path.
+ifeq ($(HOST_TARGET),X86_64)
+ALL_TARGETS := ARM64 PPC64 RISCV64 LOONGARCH64 X86_64
+M32_TARGETS := X86 ARM MIPS
+else ifeq ($(HOST_TARGET),X86)
+ALL_TARGETS := ARM MIPS X86
+M32_TARGETS :=
+else ifeq ($(HOST_TARGET),PPC64)
+ALL_TARGETS := PPC64
+M32_TARGETS := PPC
+else ifeq ($(HOST_TARGET),ARM64)
+ALL_TARGETS := X86_64 ARM64
+M32_TARGETS :=
+else
+ALL_TARGETS := $(HOST_TARGET)
+M32_TARGETS :=
+endif
+
+TARGET_LIST := $(strip $(subst $(comma),$(space),$(target)))
+
+ifeq ($(TARGET_LIST),)
+WANT_TARGETS := $(HOST_TARGET)
+MULTI :=
+else
+ifeq ($(TARGET_LIST),all)
+WANT_TARGETS := $(ALL_TARGETS)
+else
+WANT_TARGETS := $(sort $(TARGET_LIST))
+endif
+MULTI := 1
+endif
+
+WANT_M32 := $(filter $(M32_TARGETS),$(WANT_TARGETS))
+ifneq ($(WANT_M32),)
+ifneq ($(words $(WANT_TARGETS)),1)
+$(error target=$(target): build the 32-bit targets ($(WANT_M32)) one at a time)
+endif
+M32_ONLY := 1
+MULTI :=
+PROGRAM := crash-$(shell echo $(WANT_TARGETS) | tr 'A-Z' 'a-z')
+endif
+
+# The host, when wanted, is built last so the tree ends configured for it.
+MULTI_BUILD := $(if $(MULTI),$(filter-out $(HOST_TARGET),$(WANT_TARGETS)) $(filter $(HOST_TARGET),$(WANT_TARGETS)))
+
+multi_program = crash-$(shell echo $(1) | tr 'A-Z' 'a-z')
+multi_cflags = $(if $(filter X86,$(HOST_TARGET)),-D_FILE_OFFSET_BITS=64,$(if $(filter PPC64,$(HOST_TARGET)),-m64,))
+EXTRA_CFLAGS := $(shell cat CFLAGS.extra 2>/dev/null)
+
+# gdb target aliases for the crash target names.  The host target is always
+# built, so it is not listed in --enable-targets.
+gdb_alias = $(if $(filter ARM64,$(1)),aarch64-linux,$(if $(filter PPC64,$(1)),powerpc64le-linux,$(if $(filter RISCV64,$(1)),riscv64-linux,$(if $(filter LOONGARCH64,$(1)),loongarch64-linux,$(if $(filter X86_64,$(1)),x86_64-linux,$(if $(filter X86,$(1)),i686-linux,$(if $(filter ARM,$(1)),arm-linux,$(if $(filter MIPS,$(1)),mips-linux,$(1)))))))))
+GDB_TARGETS := $(strip $(foreach t,$(MULTI_BUILD),$(if $(filter $(t),$(HOST_TARGET)),,$(call gdb_alias,$(t)))))
+
+# Narrow --enable-targets to the requested targets; "all" would link every
+# gdb/bfd/opcodes backend and grow the binary by about 20 MB.
+ifeq ($(M32_ONLY),1)
+ALL_GDB_EXTRA :=
+else
+ALL_GDB_EXTRA := $(if $(GDB_TARGETS),--enable-targets=$(subst $(space),$(comma),$(GDB_TARGETS)))
+endif
+
+MULTI_STEPS = $(foreach t,$(MULTI_BUILD),$(MAKE) --no-print-directory MULTI=1 TARGET=$(t) PROGRAM=$(call multi_program,$(t)) TARGET_CFLAGS='$(call multi_cflags,$(t)) $(EXTRA_CFLAGS)' GDB_EXTRA_FLAGS='$(ALL_GDB_EXTRA)' multi-one &&)
+
+ifeq ($(MULTI),1)
+.DEFAULT_GOAL := multi
+else
+.DEFAULT_GOAL := all
+endif
+
+.PHONY: multi multi-one
+multi: make_configure
+	@[ -z "$(GDB)" ] || rm -f $(GDB)/crash.target
+	@./configure -q -b
+	@set -e; $(MULTI_STEPS) true
+	@ls -l $(foreach t,$(MULTI_BUILD),$(call multi_program,$(t)))
+
+#
+# One target of a multi-target build.  gdb_merge rebuilds the crash objects
+# only when the target changed (its stamp) and then links the binary using
+# the shared multi-target gdb.
+#
+multi-one:
+	@$(MAKE) --no-print-directory build_data.c
+	@$(MAKE) --no-print-directory gdb_merge
+
 # To build the extensions library by default, uncomment the third command
 # line below.  Otherwise they can be built by entering "make extensions".
 
+ifeq ($(MULTI),1)
+all: multi
+else
 all: make_configure
 	@./configure ${CONF_TARGET_FLAG} -p "RPMPKG=${RPMPKG}" -b
-	@$(MAKE) gdb_merge
+	@$(MAKE) GDB_EXTRA_FLAGS='$(ALL_GDB_EXTRA)' gdb_merge
 #	@$(MAKE) extensions
+endif
 
 #
 # Summarize the targets and build options described in the README.
@@ -349,6 +471,11 @@ help:
 	@echo '                          other  -> native only; ALPHA, S390, S390X,'
 	@echo '                                    SPARC64, MIPS64 and IA64 must be'
 	@echo '                                    built on that host'
+	@echo '  target=<arch>[,<arch>...]'
+	@echo '                      build crash-<arch> for the named targets, for'
+	@echo '                      example "make target=ARM64,LOONGARCH64" or'
+	@echo '                      "make target=all" for every host-word-size'
+	@echo '                      target.  A plain make builds "crash".'
 	@echo '  CROSS_COMPILE=<pfx> cross compile the crash binary itself, for example'
 	@echo '                      make CROSS_COMPILE=aarch64-linux-gnu- -j$$(nproc)'
 	@echo '  DEBUG=1             build crash and the embedded gdb with debug info (-g)'
@@ -390,18 +517,25 @@ help:
 # "No targets specified and no makefile found".
 #
 gdb_merge: force
-	@if [ ! -f ${GDB}/README ]; then \
-	  $(MAKE) gdb_unzip; fi
-	@echo "${LDFLAGS} -lz -ldl -rdynamic" > ${GDB}/gdb/mergelibs
-	@echo "../../${PROGRAM} ../../${PROGRAM}lib.a" > ${GDB}/gdb/mergeobj
-	@rm -f ${PROGRAM}
-	@if [ ! -f ${GDB}/.configured ]; then \
-	  (cd ${GDB}; ./configure ${GDB_CONF_FLAGS} --with-separate-debug-dir=/usr/lib/debug \
+	@if [ "`cat .build_target 2>/dev/null`" != "$(TARGET)" ]; then \
+	  rm -f ${OBJECT_FILES} ${GDB_OFILES} ${GDB}/gdb/frame.o; fi
+	@echo "$(TARGET)" > .build_target
+	@if [ "`cat ${GDB}/.configured 2>/dev/null`" != '$(strip ${GDB_CONF_FLAGS} ${GDB_EXTRA_FLAGS})' ]; then \
+	  rm -rf ${GDB}; $(MAKE) gdb_unzip || exit 1; \
+	  (cd ${GDB}; ./configure ${GDB_CONF_FLAGS} ${GDB_EXTRA_FLAGS} \
+	    --with-separate-debug-dir=/usr/lib/debug \
 	    --with-bugurl="" --with-expat=no --with-python=no --disable-sim \
-	    --disable-tui --disable-libctf --disable-libbacktrace && \
-	  touch .configured; \
-	  $(MAKE) CRASH_TARGET=${TARGET}; echo ${TARGET} > crash.target) \
-	else $(MAKE) rebuild; fi
+	    --disable-tui --disable-libctf --disable-libbacktrace) || exit 1; \
+	  echo '$(strip ${GDB_CONF_FLAGS} ${GDB_EXTRA_FLAGS})' > ${GDB}/.configured; fresh=1; fi; \
+	 echo "${LDFLAGS} -lz -ldl -rdynamic" > ${GDB}/gdb/mergelibs; \
+	 echo "../../${PROGRAM} ../../${PROGRAM}lib.a" > ${GDB}/gdb/mergeobj; \
+	 rm -f ${PROGRAM}; \
+	 export CRASH_BUILD_TARGET='${TARGET}' CRASH_BUILD_PROGRAM='${PROGRAM}' \
+	        CRASH_BUILD_TARGET_CFLAGS='${TARGET_CFLAGS}'; \
+	 if [ "$$fresh" = 1 ]; then \
+	   (cd ${GDB}; $(MAKE) CRASH_TARGET=${TARGET}) || exit 1; \
+	 else $(MAKE) rebuild || exit 1; fi
+	@echo ${HOST_TARGET} > ${GDB}/crash.target
 	@if [ ! -f ${PROGRAM} ]; then \
 	  echo; echo "${PROGRAM} build failed"; \
 	  if [ ! -f ${GDB}/.configured ]; then \
@@ -457,12 +591,18 @@ make_configure: force
 	@rm -f configure
 	@${HOSTCC} ${CONF_FLAGS} -o configure configure.c ${WARNING_ERROR} ${WARNING_OPTIONS}
 
+ifeq ($(MULTI),1)
+clean: make_configure
+	@$(MAKE) do_clean
+else
 clean: make_configure
 	@./configure ${CONF_TARGET_FLAG} -q -b
 	@$(MAKE) do_clean
+endif
 
 do_clean:
 	rm -f ${OBJECT_FILES} ${DAEMON_OBJECT_FILES} ${PROGRAM} ${PROGRAM}lib.a ${GDB_OFILES}
+	rm -f $(foreach t,$(MULTI_BUILD),$(call multi_program,$(t)) $(call multi_program,$(t))lib.a)
 	@$(MAKE) -C extensions -i clean
 	@$(MAKE) -C memory_driver -i clean
 
@@ -477,8 +617,23 @@ distclean: clean
 	@$(MAKE) do_distclean
 
 do_distclean:
-	rm -rf ${GDB} gdb-*/ gdb.files build_data.c configure Makefile.inc Makefile.inc.new
+	rm -rf ${GDB} gdb-*/ gdb.files build_data.c configure Makefile.inc Makefile.inc.new .build_target
 	rm -f ${PROGRAM}-*.tar.gz ${PROGRAM}.spec ${PROGRAM}-*.src.rpm
+
+ifdef MULTI
+# The multi-target path bypasses configure, so build_data.c is generated for
+# each target here.
+build_data.c: force
+	@printf 'char *build_command = "%s";\n' "$$(echo $(PROGRAM) | tr 'A-Z' 'a-z')" > $@
+	@if [ -n "$$SOURCE_DATE_EPOCH" ]; then \
+	  printf 'char *build_data = "reproducible build";\n' >> $@; \
+	else \
+	  printf 'char *build_data = "%s by %s on %s";\n' "$$(date)" "$$(id | cut -d' ' -f1)" "$$(hostname)" >> $@; \
+	fi
+	@printf 'char *build_target = "%s";\n' "${TARGET}" >> $@
+	@printf 'char *build_version = "%s";\n' "$$(cat crash-release 2>/dev/null)" >> $@
+	@printf 'char *compiler_version = "%s";\n' "$$(${CC} --version | head -1)" >> $@
+endif
 
 build_data.o: force
 	${CC} -c ${CRASH_CFLAGS} build_data.c ${WARNING_OPTIONS} ${WARNING_ERROR}
@@ -752,6 +907,16 @@ RELEASE=0
 # "make distclean" does that for you.
 #
 -include Makefile.inc
+
+#
+# The make that the embedded gdb's link rule starts for crash's objects is
+# handed the per-target values through the environment: gdb's top-level
+# Makefile sets MAKEOVERRIDES=, so command-line variables do not survive that
+# recursion, and crash's own Makefile.inc would otherwise win.
+#
+TARGET := $(or $(CRASH_BUILD_TARGET),$(TARGET))
+TARGET_CFLAGS := $(or $(CRASH_BUILD_TARGET_CFLAGS),$(TARGET_CFLAGS))
+PROGRAM := $(or $(CRASH_BUILD_PROGRAM),$(PROGRAM))
 
 release: make_configure
 	@if [ "`id --user`" != "0" ]; then \

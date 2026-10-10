@@ -1,11 +1,15 @@
 configure
 build_data.c
+.build_target
 Makefile.inc
 Makefile.inc.new
 cscope.out
 crashlib.a
+crash-*lib.a
 *.o
 crash
+crash-*
+!/crash-release
 CFLAGS.extra
 LDFLAGS.extra
 crash.spec
